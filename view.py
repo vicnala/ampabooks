@@ -23,12 +23,19 @@ def login_post(session):
     if not login_form.validates(): 
         return render.login(login_form, datetime.now(), allow = True)
     else:
-        allowed = config.DB.select('users').list()
-        for i in allowed:
-            if login_form.d.usuario == i.username:
-                session.logged_in = True
-                session.name = i.name
-                session.username = i.username
-                raise web.seeother('/search')
+        if login_form.d.usuario == 'admin':
+            session.logged_in = True
+            raise web.seeother('/admin')
+        else:
+            allowed = config.DB.select('users').list()
+            for i in allowed:
+                if login_form.d.usuario == i.username:
+                    session.logged_in = True
+                    session.name = i.name
+                    session.username = i.username
+                    raise web.seeother('/search')
         return render.login(login_form, datetime.now(), allow = False)
 
+
+def admin():
+    return render.admin()

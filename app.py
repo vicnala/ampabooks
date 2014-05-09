@@ -6,6 +6,8 @@ urls = (
     '/', 'index',
     '/search','search',
     '/login','login',
+    '/logout','logout',
+    '/admin','admin',
     '/libros.css','css',
     '/favicon.ico','favicon',
 )
@@ -47,12 +49,24 @@ class search:
         return render.search()
 
 
+class admin:
+    @restrict
+    def GET(self):
+        return view.admin()
+
+
 class login:
     def GET(self):
         return view.login()
 
     def POST(self):
         return view.login_post(session)
+
+
+class logout:
+    def GET(self):
+        session.logged_in = False
+        raise web.seeother('/')
 
 
 class css:
