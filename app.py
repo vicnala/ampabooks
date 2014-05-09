@@ -51,7 +51,9 @@ class search:
 class admin:
     @restrict
     def GET(self):
-        return view.admin()
+        if session.username == 'admin':
+            return view.admin()
+        raise web.seeother('/')
 
 
 class login:
