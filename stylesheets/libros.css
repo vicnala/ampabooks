@@ -1,0 +1,13 @@
+h3 {color:gray;}
+p.error {color:red;}
+tr:nth-child(even) {background: #EEE}
+tr:nth-child(odd) {background: #FFF}
+td {font-size:smaller}
+a.def:link {color:#0000ff; text-decoration:none; padding: 2px 5px 2px 5px;}
+a.def:visited {color:#0000ff; text-decoration:none;}
+a.def:hover {color:#0000ff; text-decoration:none; border-radius:5px; background-color:#DDD; padding: 2px 5px 2px 5px;}
+
+a.dev:link {color:#ff0000; text-decoration:none; padding: 2px 5px 2px 5px;}
+a.dev:visited {color:#ff0000; text-decoration:none;}
+a.dev:hover {color:#ff0000; text-decoration:none; border-radius:5px; background-color:#DDD; padding: 2px 5px 2px 5px;}
+

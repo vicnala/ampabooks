@@ -2,6 +2,7 @@ import web
 import os.path
 import sys
 
+DATABASE = 'libros.sqlite'
 
 def _touch(fname, times=None):
     fhandle = open(fname, 'a')
@@ -13,24 +14,31 @@ def _touch(fname, times=None):
 
     return False
 
-if os.path.isfile('libros.sqlite'):
-    DB = web.database(dbn='sqlite', db='libros.sqlite')
-else:
-    print 'libros.sqlite file not found'
-    if _touch('libros.sqlite'):
-        print 'created libros.sqlite file'
-        import sqlite3
-        conn = sqlite3.connect('libros.sqlite')
-        c = conn.cursor()
-        from tables import items, item1
-        c.execute(items)
-        c.execute(item1)
-        conn.commit()
-        conn.close()
+def _init ():
+    import sqlite3
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+    from tables import items, item1, users, groups, tickets, students, books
+    c.execute(items)
+    c.execute(item1)
+    c.execute(users)
+    c.execute(groups)
+    c.execute(tickets)
+    c.execute(students)
+    c.execute(books)
+    conn.commit()
+    conn.close()
 
-        DB = web.database(dbn='sqlite', db='libros.sqlite')
+if os.path.isfile(DATABASE):
+    DB = web.database(dbn='sqlite', db=DATABASE)
+else:
+    print DATABASE, 'file not found'
+    if _touch(DATABASE):
+        print 'created', DATABASE
+        _init()
+        DB = web.database(dbn='sqlite', db=DATABASE)
     else:
-        print 'ERROR crerating libros.sqlite'
+        print 'Error crerating', DATABASE, 'file'
         sys.exit(1)
 
 

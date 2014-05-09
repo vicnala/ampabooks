@@ -52,3 +52,11 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Database file
+*.sqlite
+
+# web.py web directory
+web
+
+# Sessions
+sessions
