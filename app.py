@@ -21,7 +21,6 @@ session = web.session.Session(app, web.session.DiskStore('sessions'), {
     'logged_in': None
 })
 
-
 class restrict(object):
     """
     Decorator for admin section of the website that need restriction.
@@ -65,7 +64,7 @@ class login:
 
 class logout:
     def GET(self):
-        session.logged_in = False
+        session.kill()
         raise web.seeother('/')
 
 
