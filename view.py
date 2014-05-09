@@ -9,7 +9,7 @@ t_globals = dict(
   datestr=web.datestr,
 )
 render = web.template.render('templates/', cache=config.cache, 
-    globals=t_globals)
+    globals=t_globals, base='layout')
 render._keywords['globals']['render'] = render
 
 def listing(**k):
@@ -25,10 +25,10 @@ def login_post(session):
     else:
         allowed = config.DB.select('users').list()
         for i in allowed:
-            if form.d.usuario == i.username:
+            if login_form.d.usuario == i.username:
                 session.logged_in = True
                 session.name = i.name
                 session.username = i.username
-                raise web.seeother('/')
+                raise web.seeother('/search')
         return render.login(login_form, datetime.now(), allow = False)
 
