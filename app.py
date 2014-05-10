@@ -8,8 +8,11 @@ urls = (
     '/login','login',
     '/logout','logout',
     '/admin','admin',
+    '/grades', 'grades',
+    '/gradeadd', 'gradeadd',
+    '/students', 'students',
     '/users','users',
-    '/adduser', 'adduser',
+    '/useradd', 'useradd',
     '/libros.css','css',
     '/favicon.ico','favicon',
 )
@@ -69,6 +72,24 @@ class admin:
         return view.admin_get()
 
 
+class grades:
+    @admin_restrict
+    def GET(self):
+        return view.grades_get()
+
+    def POST(self):
+        return view.grades_post()
+
+
+class gradeadd:
+    @admin_restrict
+    def GET(self):
+        return view.gradeadd_get()
+
+    def POST(self):
+        return view.gradeadd_post()
+
+
 class users:
     @admin_restrict
     def GET(self):
@@ -78,13 +99,22 @@ class users:
         return view.users_post()
 
 
-class adduser:
+class useradd:
     @admin_restrict
     def GET(self):
-        return view.adduser_get()
+        return view.useradd_get()
 
     def POST(self):
-        return view.adduser_post()
+        return view.useradd_post()
+
+
+class students:
+    @admin_restrict
+    def GET(self):
+        return view.students_get()
+
+    def POST(self):
+        return view.students_post()
 
 
 class login:

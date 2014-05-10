@@ -1,0 +1,23 @@
+$def with (grades)
+<a href="/" class = "def">inicio</a>
+<a href="/gradeadd" class = "def">nuevo_curso</a>
+<b><i>Admin!</i></b>(<a href="/logout" class = "def">logout</a>)
+<h2>Cursos registrados</h2>
+
+<form name="grades" method="post">
+
+<table border="0" cellpadding="2">
+<tr>
+	<td style="color:#ff0000"><b>delete</b></td>
+	<td><b>Curso</b></td>
+</tr>
+$for grade in grades:
+	<tr id="t$grade.id">
+        <td><input type="Checkbox" name="$grade.id"></input></td>
+		<td>$grade.grade</td>
+	</tr>
+</table>
+
+<input type="submit" />
+</form>
+
