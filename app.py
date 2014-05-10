@@ -8,6 +8,7 @@ urls = (
     '/login','login',
     '/logout','logout',
     '/admin','admin',
+    '/users','users',
     '/libros.css','css',
     '/favicon.ico','favicon',
 )
@@ -21,16 +22,27 @@ session = web.session.Session(app, web.session.DiskStore('sessions'), {
     'logged_in': None
 })
 
+
 class restrict(object):
-    """
-    Decorator for admin section of the website that need restriction.
-    """
+    # Decorator for user sections of the website that need restriction.
     def __init__(self, request):
         self.__request = request
 
     def __call__(self, *args, **kwargs):
         if session.logged_in != True:
             web.seeother('/login')
+        else:
+            return self.__request(self, *args, **kwargs)
+
+
+class admin_restrict(object):
+    # Decorator for admin sections of the website.
+    def __init__(self, request):
+        self.__request = request
+
+    def __call__(self, *args, **kwargs):
+        if session.username != 'admin':
+            web.seeother('/')
         else:
             return self.__request(self, *args, **kwargs)
 
@@ -49,11 +61,9 @@ class search:
 
 
 class admin:
-    @restrict
+    @admin_restrict
     def GET(self):
-        if session.username == 'admin':
-            return view.admin()
-        raise web.seeother('/')
+        return view.admin()
 
 
 class login:
