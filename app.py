@@ -9,6 +9,7 @@ urls = (
     '/logout','logout',
     '/admin','admin',
     '/users','users',
+    '/adduser', 'adduser',
     '/libros.css','css',
     '/favicon.ico','favicon',
 )
@@ -51,7 +52,9 @@ class index:
     @restrict
     def GET(self):
         #return view.listing()
-        raise web.seeother('/search')
+        if session.username != 'admin':
+            raise web.seeother('/search')
+        raise web.seeother('/admin')
 
 
 class search:
@@ -63,12 +66,30 @@ class search:
 class admin:
     @admin_restrict
     def GET(self):
-        return view.admin()
+        return view.admin_get()
+
+
+class users:
+    @admin_restrict
+    def GET(self):
+        return view.users_get()
+
+    def POST(self):
+        return view.users_post()
+
+
+class adduser:
+    @admin_restrict
+    def GET(self):
+        return view.adduser_get()
+
+    def POST(self):
+        return view.adduser_post()
 
 
 class login:
     def GET(self):
-        return view.login()
+        return view.login_get()
 
     def POST(self):
         return view.login_post(session)
