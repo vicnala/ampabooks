@@ -12,3 +12,7 @@ useradd_form = web.form.Form(
 gradeadd_form = web.form.Form(
     web.form.Textbox('curso', web.form.notnull),
 )
+
+groupadd_form = web.form.Form(
+    web.form.Textbox('grupo', web.form.notnull),
+)

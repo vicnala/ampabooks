@@ -13,7 +13,10 @@ $def with (groups)
 </tr>
 $for group in groups:
 	<tr id="t$group.id">
-        <td><input type="Checkbox" name="$group.id"></input></td>
+        <td>
+        	$if group.id != 1:
+        		<input type="Checkbox" name="$group.id"></input>
+        </td>
 		<td>$group.groupe</td>
 	</tr>
 </table>

@@ -17,7 +17,7 @@ El usuario <b>ORG</b> se usa para definir el emisor del ticket.
 $for user in users:
 	<tr id="t$user.id">
         <td>
-        	$if user.username != 'admin':
+        	$if user.id != 1:
         		<input type="Checkbox" name="$user.id"></input>
         </td>
 		<td>$user.username</td>

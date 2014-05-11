@@ -10,6 +10,8 @@ urls = (
     '/admin','admin',
     '/grades', 'grades',
     '/gradeadd', 'gradeadd',
+    '/groups', 'groups',
+    '/groupadd', 'groupadd',
     '/students', 'students',
     '/users','users',
     '/useradd', 'useradd',
@@ -60,12 +62,6 @@ class index:
         raise web.seeother('/admin')
 
 
-class search:
-    @restrict
-    def GET(self):
-        return render.search()
-
-
 class admin:
     @admin_restrict
     def GET(self):
@@ -77,6 +73,7 @@ class grades:
     def GET(self):
         return view.grades_get()
 
+    @admin_restrict
     def POST(self):
         return view.grades_post()
 
@@ -86,8 +83,31 @@ class gradeadd:
     def GET(self):
         return view.gradeadd_get()
 
+    @admin_restrict
     def POST(self):
         return view.gradeadd_post()
+
+
+
+class groups:
+    @admin_restrict
+    def GET(self):
+        return view.groups_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.groups_post()
+
+
+class groupadd:
+    @admin_restrict
+    def GET(self):
+        return view.groupadd_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.groupadd_post()
+
 
 
 class users:
@@ -95,6 +115,7 @@ class users:
     def GET(self):
         return view.users_get()
 
+    @admin_restrict
     def POST(self):
         return view.users_post()
 
@@ -104,6 +125,7 @@ class useradd:
     def GET(self):
         return view.useradd_get()
 
+    @admin_restrict
     def POST(self):
         return view.useradd_post()
 
@@ -113,8 +135,17 @@ class students:
     def GET(self):
         return view.students_get()
 
+    @admin_restrict
     def POST(self):
         return view.students_post()
+
+
+
+class search:
+    @restrict
+    def GET(self):
+        return render.search()
+
 
 
 class login:

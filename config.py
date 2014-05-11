@@ -18,13 +18,15 @@ def _init ():
     import sqlite3
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    from tables import items, item1, users, admin, grades, groups, tickets, students, books
+    from tables import items, item1, users, admin, grades, groups, tickets, students, books, default_grade, default_group
     c.execute(items)
     c.execute(item1)
     c.execute(users)
     c.execute(admin)
     c.execute(grades)
+    c.execute(default_grade)
     c.execute(groups)
+    c.execute(default_group)
     c.execute(tickets)
     c.execute(students)
     c.execute(books)
@@ -34,13 +36,13 @@ def _init ():
 if os.path.isfile(DATABASE):
     DB = web.database(dbn='sqlite', db=DATABASE)
 else:
-    print DATABASE, 'file not found'
+    print DATABASE, 'file not found.'
     if _touch(DATABASE):
-        print 'created', DATABASE
+        print 'initializing database', DATABASE, '...'
         _init()
         DB = web.database(dbn='sqlite', db=DATABASE)
     else:
-        print 'Error crerating', DATABASE, 'file'
+        print 'Error crerating', DATABASE, 'file.'
         sys.exit(1)
 
 

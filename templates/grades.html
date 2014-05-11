@@ -13,7 +13,10 @@ $def with (grades)
 </tr>
 $for grade in grades:
 	<tr id="t$grade.id">
-        <td><input type="Checkbox" name="$grade.id"></input></td>
+        <td>
+        	$if grade.id != 1:
+        		<input type="Checkbox" name="$grade.id"></input>
+        </td>
 		<td>$grade.grade</td>
 	</tr>
 </table>

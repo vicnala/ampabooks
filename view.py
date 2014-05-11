@@ -2,8 +2,9 @@ import web
 import db
 import config
 from datetime import datetime
-from forms import login_form, useradd_form, gradeadd_form
+from forms import login_form, useradd_form, gradeadd_form, groupadd_form
 
+import sys
 
 t_globals = dict(
   datestr=web.datestr,
@@ -60,6 +61,47 @@ def grades_post():
         config.DB.delete('grades', where="id=$grades_id", vars=locals())
     raise web.seeother('/grades')
 
+def gradeadd_get():
+    return render.gradeadd(gradeadd_form)
+
+def gradeadd_post():
+    if not gradeadd_form.validates(): 
+        return render.gradeadd(gradeadd_form)
+    else:
+        try:
+            config.DB.insert('grades', grade=gradeadd_form.d.curso)
+        except:
+            return "El curso ya existe!"
+        raise web.seeother('/grades')
+
+
+
+def groups_get():
+    groups = config.DB.select('groups')
+    return render.groups(groups)
+
+def groups_post():
+    i = web.input()
+    for groups_id in i:
+        config.DB.delete('groups', where="id=$groups_id", vars=locals())
+    raise web.seeother('/groups')
+
+def groupadd_get():
+    return render.groupadd(groupadd_form)
+
+def groupadd_post():
+    if not groupadd_form.validates(): 
+        return render.groupadd(groupadd_form)
+    else:
+        try:
+            print groupadd_form.d.grupo
+            config.DB.insert('groups', groupe=groupadd_form.d.grupo)
+        except:
+            return "El grupo ya existe!"
+        raise web.seeother('/groups')
+
+
+
 
 def users_get():
     users = config.DB.select('users')
@@ -71,21 +113,6 @@ def users_post():
         config.DB.delete('users', where="id=$user_id", vars=locals())
     raise web.seeother('/users')
 
-
-def gradeadd_get():
-    return render.gradeadd(gradeadd_form)
-
-def gradeadd_post():
-    if not gradeadd_form.validates(): 
-        return render.login(gradeadd_form)
-    else:
-        try:
-            config.DB.insert('grades', grade = gradeadd_form.d.curso)
-        except:
-            return "El curso ya existe!"
-        raise web.seeother('/grades')
-
-
 def useradd_get():
     return render.useradd(useradd_form)
 
@@ -94,7 +121,7 @@ def useradd_post():
         return render.login(useradd_form)
     else:
         try:
-            config.DB.insert('users', username = useradd_form.d.username, name = useradd_form.d.name)
+            config.DB.insert('users', username=useradd_form.d.username, name=useradd_form.d.name)
         except:
             return "El usuario ya existe, elige otro."
         raise web.seeother('/users')
