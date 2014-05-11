@@ -1,0 +1,23 @@
+$def with (groups)
+<a href="/" class="def">inicio</a>
+<a href="/groupadd" class="def">nuevo_grupo</a>
+<b><i>Admin!</i></b>(<a href="/logout" class="def">logout</a>)
+<h2>Grupos registrados</h2>
+
+<form name="groups" method="post">
+
+<table border="0" cellpadding="2">
+<tr>
+	<td style="color:#ff0000"><b>delete</b></td>
+	<td><b>Grupo</b></td>
+</tr>
+$for group in groups:
+	<tr id="t$group.id">
+        <td><input type="Checkbox" name="$group.id"></input></td>
+		<td>$group.groupe</td>
+	</tr>
+</table>
+
+<input type="submit" />
+</form>
+

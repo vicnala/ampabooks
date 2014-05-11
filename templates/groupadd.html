@@ -1,9 +1,9 @@
 $def with (form)
-<title>Nuevo curso</title>
-<body onload="javascript:document.main.curso.focus()">
-<a href="/" class="def">inicio</a> <a href="/grades" class="def">cursos</a>
+<title>Nuevo grupo</title>
+<body onload="javascript:document.main.grupo.focus()">
+<a href="/" class="def">inicio</a> <a href="/groups" class="def">grupos</a>
 <b><i>Admin!</i></b> (<a href="/logout" class="def">logout</a>)
-<h2>Nuevo curso:</h2>
+<h2>Nuevo grupo:</h2>
 <form name="main" method="post" id="main"> 
 $if not form.valid: <p class="error">* Revisa los campos obligatorios!</p>
 $:form.render()

@@ -1,22 +1,14 @@
 $def with (form, date, allow)
-
 <title>Ampa Books Login</title>
-
 <body onload="javascript:document.main.usuario.focus()">
-
 <a href="/" class = "def">inicio</a> $date <a href="/COPYING" class="def">&copy; vicnala 2014</a>
-
 <h3>Distribución de libros de texto</h3>
-
 <p><i>Accede con tu <b>nombre de usuario</b>:</i></p>
-
 $if allow is False:
     <p class="error">* El nombre de usuario no existe!</p>
-
 <form name="main" method="post" id="main"> 
 $if not form.valid: <p class="error">* Revisa los campos obligatorios!</p>
 $:form.render()
 <input type="submit" />
 </form>
-
 </body>
