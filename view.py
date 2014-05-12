@@ -213,3 +213,24 @@ def studedit_post(_id):
             mail2=data['mail2'], grupo=data['grupo'], vars=locals())
 
     raise web.seeother('/students')
+
+
+def studexport_get():
+    students = config.DB.select('students')
+    csv = []
+    csv.append('nombre;curso;grupo;tutor;tel1;tel2;mail1;mail2')
+    for stud in students:
+        row = []
+        row.append(stud['nombre'])
+        row.append(stud['curso'])
+        row.append(stud['grupo'])
+        row.append(stud['tutor'])
+        row.append(stud['tel1'])
+        row.append(stud['tel2'])
+        row.append(stud['mail1'])
+        row.append(stud['mail2'])
+        csv.append(";".join(row))
+
+    web.header('Content-Type','text/csv')
+    web.header('Content-disposition', 'attachment; filename=alumnos.csv')
+    return "\n".join(csv)

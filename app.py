@@ -15,6 +15,7 @@ urls = (
     '/students', 'students',
     '/studadd', 'studadd',
     '/studedit/(.*)', 'studedit',
+    '/studexport', 'studexport',
     '/users','users',
     '/useradd', 'useradd',
     '/libros.css','css',
@@ -161,6 +162,15 @@ class studedit:
     @admin_restrict
     def POST(self, _id):
         return view.studedit_post(web.websafe(_id))
+
+class studexport:
+    @admin_restrict
+    def GET(self):
+        return view.studexport_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.studexport_post()
 
 
 
