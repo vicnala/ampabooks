@@ -1,0 +1,37 @@
+$def with (books, booksearchkeys)
+<title>Buscar libros</title>
+<a href="/" class="def">inicio</a>
+<a href="/bookadd" class="def">nuevo_libro</a>
+<a href="/bookimport" class="def">importar_libros</a>
+<a href="/bookexport" class="def">exportar_libros</a>
+<b><i>Admin!</i></b> (<a href="/logout" class="def">logout</a>)
+
+<p><i><b>Buscar</b> y <b>editar</b> libros:</i></p>
+
+<form name="book" method="post">
+<input type="submit" />
+<table border="0" cellpadding="2">
+<tr>
+    <td style="color:#0000ff"><b>edit</b></td>
+    <td><b>id</b></td>
+    <td><b>titulo</b></td>
+    <td><b>curso</b></td>
+    <td><b>grupo</b></td>
+    <td><b>editorial</b></td>
+    <td><b>precio</b></td>
+    <td><b>stock</b></td>
+</tr>
+$for book in books:
+    <tr id="t$book.id">
+        <td><input type="Checkbox" name="$book.id"></input></td>
+        <td>$book.id</td>
+        <td>$book.titulo</td>
+        <td>$book.curso</td>
+        <td>$book.grupo</td>
+        <td>$book.editorial</td>
+        <td>$book.precio</td>
+        <td>$book.stock</td>
+    </tr>
+</table>
+<input type="submit" />
+</form>

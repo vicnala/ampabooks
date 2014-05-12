@@ -1,20 +1,20 @@
-$def with (stud, grades, groups)
-<title>Editar alumno</title>
-<a href="/" class = "def">inicio</a> <a href="/students" class = "def">alumnos</a>
+$def with (book, grades, groups)
+<title>Editar libro</title>
+<a href="/" class = "def">inicio</a> <a href="/books" class = "def">alumnos</a>
 <b><i>Admin!</i></b> (<a href="/logout" class = "def">logout</a>)
 
-<h2>Editar alumno:</h2>
+<h2>Editar libro:</h2>
 
-$for s in stud
-    <form name="studedit" method="post" id="1">
+$for s in book
+    <form name="bookedit" method="post" id="1">
     <table border="0" cellpadding="2">
     <tr>
         <td><b>id</b></td>
         <td>$s['id']</input></td>
     </tr>
     <tr>
-        <td><b>nombre</b></td>
-        <td><input type="text" name="nombre_$s['id']" value="$s['nombre']" size="64"></input></td>
+        <td><b>titulo</b></td>
+        <td><input type="text" name="titulo_$s['id']" value="$s['titulo']" size="64"></input></td>
     </tr>
     <tr>
         <td><b>curso</b></td>
@@ -41,33 +41,22 @@ $for s in stud
         </td>
     </tr>
     <tr>
-        <td><b>tutor</b></td>
-        <td><input type="text" name="tutor_$s['id']" value="$s['tutor']" size="64"></input></td>
+        <td><b>editorial</b></td>
+        <td><input type="text" name="editorial_$s['id']" value="$s['editorial']" size="64"></input></td>
     </tr>
     <tr>
-        <td><b>tel1</b></td>
-        <td><input type="text" name="tel1_$s['id']" value="$s['tel1']" size="12"></input></td>
+        <td><b>precio</b></td>
+        <td><input type="text" name="precio_$s['id']" value="$s['precio']" size="12"></input></td>
     </tr>
 
     <tr>
-        <td><b>tel2</b></td>
-        <td><input type="text" name="tel2_$s['id']" value="$s['tel2']" size="12"></input></td>
+        <td><b>stock</b></td>
+        <td><input type="text" name="stock_$s['id']" value="$s['stock']" size="12"></input></td>
     </tr>
-
-    <tr>
-        <td><b>mail1</b></td>
-        <td><input type="text" name="mail1_$s['id']" value="$s['mail1']" size="32"></input></td>
-    </tr>
-
-    <tr>
-        <td><b>mail2</b></td>
-        <td><input type="text" name="mail2_$s['id']" value="$s['mail2']" size="32"></input></td>
-    </tr>
-
     </table>
 
     <hr />
-    <input type="checkbox" name="delete_$s['id']"></input> <b style="color:#ff0000">Eliminar alumno</b></td> 
+    <input type="checkbox" name="delete_$s['id']"></input> <b style="color:#ff0000">Eliminar libro</b></td> 
     <hr />
     <input type="submit" />
     </form>
