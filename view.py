@@ -2,9 +2,8 @@ import web
 import db
 import config
 from datetime import datetime
-from forms import login_form, useradd_form, gradeadd_form, groupadd_form
+from forms import login_form, useradd_form, gradeadd_form, groupadd_form, addstud_form
 
-import sys
 
 t_globals = dict(
   datestr=web.datestr,
@@ -129,4 +128,88 @@ def useradd_post():
 
 
 def students_get():
-    return render.students()
+    students = config.DB.select('students')
+    return render.students(students, {})
+
+def students_post():
+    i = web.input()
+    for key, value in i.items():
+        if value in 'on':
+            raise web.seeother('/studedit/' + key)
+
+
+grades = []
+groups = []
+
+def studadd_get():
+    db_grades = config.DB.select('grades')
+    for grade in db_grades:
+        grades.append((grade.grade, grade.grade))
+
+    db_groups = config.DB.select('groups')
+    for group in db_groups:
+        groups.append((group.groupe, group.groupe))
+    f = addstud_form(grades, groups)
+    return render.studadd(f)
+
+def studadd_post():
+    f = addstud_form(grades, groups)
+    if not f.validates(): 
+        return render.studadd(f)
+    else:
+        config.DB.insert('students', nombre=f.d.nombre, curso=f.d.curso, grupo=f.d.grupo, tutor=f.d.tutor, tel1=f.d.tel1, tel2=f.d.tel2, mail1=f.d.mail1, mail2=f.d.mail2)
+        raise web.seeother('/students')
+
+
+
+def studedit_get(_id):
+    stud = config.DB.select('students', where="id=$_id", vars=locals())
+    if stud is not None:
+        db_grades = config.DB.select('grades')
+        db_groups = config.DB.select('groups')
+
+        return render.studedit(stud, db_grades, db_groups)
+    else:
+        raise web.seeother('/students')
+
+
+def studedit_post(_id):
+    i = web.input()
+    delete = False
+
+    stud_data = config.DB.select('students', where="id=$_id", vars=locals())
+    data = {}
+
+    if stud_data is not None:
+        for k, v in stud_data[0].items():
+            data[k] = v
+
+    for key, value in i.items():
+        #print key, value
+        if key in "nombre_" + str(_id):
+            data['nombre'] = value
+        elif key in "curso_" + str(_id):
+            data['curso'] = value
+        elif key in "grupo_" + str(_id):
+            data['grupo'] = value
+        elif key in "tutor_" + str(_id):
+            data['tutor'] = value
+        elif key in "tel1_" + str(_id):
+            data['tel1'] = value
+        elif key in "tel2_" + str(_id):
+            data['tel2'] = value
+        elif key in "mail1_" + str(_id):
+            data['mail1'] = value
+        elif key in "mail2_" + str(_id):
+            data['mail2'] = value
+        elif key in "delete_" + str(_id):
+            delete = True
+
+    if delete:
+        config.DB.delete('students', where="id=$_id", vars=locals())
+    else:
+        config.DB.update('students', where="id=$_id", nombre=data['nombre'], curso=data['curso'], 
+            tutor=data['tutor'], tel1=data['tel1'], tel2=data['tel2'], mail1=data['mail1'],
+            mail2=data['mail2'], grupo=data['grupo'], vars=locals())
+
+    raise web.seeother('/students')

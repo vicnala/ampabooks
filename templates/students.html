@@ -1,6 +1,44 @@
+$def with (studs, studsearchkeys)
+
 <a href="/" class="def">inicio</a>
 <a href="/studadd" class="def">nuevo_alumno</a>
 <a href="/studimport" class="def">importar_alumnos</a>
 <b><i>Admin!</i></b> (<a href="/logout" class="def">logout</a>)
 
 <p><i><b>Buscar</b> y <b>editar</b> alumnos:</i></p>
+
+<form name="students" method="post">
+<input type="submit" />
+<table border="0" cellpadding="2">
+<tr>
+    <td style="color:#0000ff"><b>edit</b></td>
+    <td><b>id</b></td>
+    <td><b>curso</b></td>
+    <td><b>grupo</b></td>
+    <td><b>nombre</b></td>
+    <td><b>tutor</b></td>
+    <!-- td><b>socio</b></td>
+    <td><b>hermano</b></td -->
+    <td><b>tel1</b></td>
+    <td><b>tel2</b></td>
+    <td><b>mail1</b></td>
+    <td><b>mail2</b></td>
+</tr>
+$for student in studs:
+    <tr id="t$student.id">
+        <td><input type="Checkbox" name="$student.id"></input></td>
+        <td>$student.id</td>
+        <td>$student.curso</td>
+        <td>$student.grupo</td>
+        <td>$student.nombre</td>
+        <td>$student.tutor</td>
+        <!-- td>$student.socio</td>
+        <td>$student.hermano</td -->
+        <td>$student.tel1</td>
+        <td>$student.tel2</td>
+        <td>$student.mail1</td>
+        <td>$student.mail2</td>
+    </tr>
+</table>
+<input type="submit" />
+</form>

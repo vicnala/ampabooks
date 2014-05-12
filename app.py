@@ -13,6 +13,8 @@ urls = (
     '/groups', 'groups',
     '/groupadd', 'groupadd',
     '/students', 'students',
+    '/studadd', 'studadd',
+    '/studedit/(.*)', 'studedit',
     '/users','users',
     '/useradd', 'useradd',
     '/libros.css','css',
@@ -130,6 +132,7 @@ class useradd:
         return view.useradd_post()
 
 
+
 class students:
     @admin_restrict
     def GET(self):
@@ -138,6 +141,26 @@ class students:
     @admin_restrict
     def POST(self):
         return view.students_post()
+
+
+class studadd:
+    @admin_restrict
+    def GET(self):
+        return view.studadd_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.studadd_post()
+
+
+class studedit:
+    @admin_restrict
+    def GET(self, _id):
+        return view.studedit_get(web.websafe(_id))
+
+    @admin_restrict
+    def POST(self, _id):
+        return view.studedit_post(web.websafe(_id))
 
 
 
