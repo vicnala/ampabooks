@@ -16,6 +16,12 @@ urls = (
     '/studadd', 'studadd',
     '/studedit/(.*)', 'studedit',
     '/studexport', 'studexport',
+    '/studimport', 'studimport',
+    '/books', 'books',
+    '/bookadd', 'bookadd',
+    '/bookedit/(.*)', 'bookedit',
+    '/bookexport', 'bookexport',
+    '/bookimport', 'bookimport',
     '/users','users',
     '/useradd', 'useradd',
     '/libros.css','css',
@@ -171,6 +177,67 @@ class studexport:
     @admin_restrict
     def POST(self):
         return view.studexport_post()
+
+
+class studimport:
+    @admin_restrict
+    def GET(self):
+        return view.studimport_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.studimport_post()
+
+
+
+class books:
+    @admin_restrict
+    def GET(self):
+        return view.books_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.books_post()
+
+
+class bookadd:
+    @admin_restrict
+    def GET(self):
+        return view.bookadd_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.bookadd_post()
+
+
+class bookedit:
+    @admin_restrict
+    def GET(self, _id):
+        return view.bookedit_get(web.websafe(_id))
+
+    @admin_restrict
+    def POST(self, _id):
+        return view.bookedit_post(web.websafe(_id))
+
+
+class bookexport:
+    @admin_restrict
+    def GET(self):
+        return view.bookexport_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.bookexport_post()
+
+
+class bookimport:
+    @admin_restrict
+    def GET(self):
+        return view.bookimport_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.bookimport_post()
 
 
 

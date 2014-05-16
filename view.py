@@ -2,8 +2,10 @@ import web
 import db
 import config
 from datetime import datetime
-from forms import login_form, useradd_form, gradeadd_form, groupadd_form, addstud_form
-
+from forms import login_form, useradd_form, gradeadd_form, groupadd_form, studadd_form, bookadd_form
+import csv
+import sqlite3
+import os
 
 t_globals = dict(
   datestr=web.datestr,
@@ -19,7 +21,8 @@ def listing(**k):
     l = db.listing(**k)
     return render.listing(l)
 
-
+grades = []
+groups = []
 
 def login_get():
     return render.login(login_form, datetime.now().strftime("%d-%m-%Y %H:%M:%S"), allow = True)
@@ -138,9 +141,6 @@ def students_post():
             raise web.seeother('/studedit/' + key)
 
 
-grades = []
-groups = []
-
 def studadd_get():
     db_grades = config.DB.select('grades')
     for grade in db_grades:
@@ -149,11 +149,11 @@ def studadd_get():
     db_groups = config.DB.select('groups')
     for group in db_groups:
         groups.append((group.groupe, group.groupe))
-    f = addstud_form(grades, groups)
+    f = studadd_form(grades, groups)
     return render.studadd(f)
 
 def studadd_post():
-    f = addstud_form(grades, groups)
+    f = studadd_form(grades, groups)
     if not f.validates(): 
         return render.studadd(f)
     else:
@@ -217,8 +217,8 @@ def studedit_post(_id):
 
 def studexport_get():
     students = config.DB.select('students')
-    csv = []
-    csv.append('nombre;curso;grupo;tutor;tel1;tel2;mail1;mail2')
+    data = []
+    data.append('nombre,curso,grupo,tutor,tel1,tel2,mail1,mail2')
     for stud in students:
         row = []
         row.append(stud['nombre'])
@@ -229,8 +229,149 @@ def studexport_get():
         row.append(stud['tel2'])
         row.append(stud['mail1'])
         row.append(stud['mail2'])
-        csv.append(";".join(row))
+        data.append(",".join(row))
 
     web.header('Content-Type','text/csv')
     web.header('Content-disposition', 'attachment; filename=alumnos.csv')
-    return "\n".join(csv)
+    return "\n".join(data)
+
+
+def studimport_get():
+    web.header("Content-Type","text/html; charset=utf-8")
+    return render.studimport()
+
+
+def studimport_post():
+    x = web.input(myfile={})
+    if 'myfile' in x:
+        fname = 'tmp/alumnos.csv'
+        f = open(fname, 'w')
+        f.write(x.myfile.file.read())
+        f.close()
+
+        with open(fname, 'rb') as data:
+            try:
+                # csv.DictReader uses first line in file for column headings by default
+                dr = csv.DictReader(data) # comma is default delimiter
+                to_db = [(i['nombre'], i['curso'], i['grupo'], i['tutor'], i['tel1'],
+                         i['tel2'], i['mail1'], i['mail2']) for i in dr]
+            except Exception, e:
+                os.remove(fname)
+                return render.error('csv.DictReader', e)
+            else:
+                con = sqlite3.connect('libros.sqlite')
+                con.text_factory = str
+                cur = con.cursor()
+                try:
+                    cur.executemany('''INSERT INTO students (nombre, curso, grupo, tutor, 
+                                        tel1, tel2, mail1, mail2)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?);''',
+                                        to_db)
+                    con.commit()
+                except Exception, e:
+                    return render.error('SQLite', e)
+
+    raise web.seeother('/students')
+
+
+
+
+def books_get():
+    books = config.DB.select('books')
+    return render.books(books, {})
+
+def books_post():
+    i = web.input()
+    for key, value in i.items():
+        if value in 'on':
+            raise web.seeother('/bookedit/' + key)
+
+
+def bookadd_get():
+    db_grades = config.DB.select('grades')
+    for grade in db_grades:
+        grades.append((grade.grade, grade.grade))
+
+    db_groups = config.DB.select('groups')
+    for group in db_groups:
+        groups.append((group.groupe, group.groupe))
+    f = bookadd_form(grades, groups)
+    return render.bookadd(f)
+
+def bookadd_post():
+    f = bookadd_form(grades, groups)
+    if not f.validates(): 
+        return render.bookadd(f)
+    else:
+        config.DB.insert('books', titulo=f.d.titulo, curso=f.d.curso, grupo=f.d.grupo, editorial=f.d.editorial, precio=f.d.precio, stock=f.d.stock)
+        raise web.seeother('/books')
+
+
+
+def bookedit_get(_id):
+    book = config.DB.select('books', where="id=$_id", vars=locals())
+    if book is not None:
+        db_grades = config.DB.select('grades')
+        db_groups = config.DB.select('groups')
+
+        return render.bookedit(book, db_grades, db_groups)
+    else:
+        raise web.seeother('/books')
+
+
+def bookedit_post(_id):
+    i = web.input()
+    delete = False
+
+    book_data = config.DB.select('books', where="id=$_id", vars=locals())
+    data = {}
+
+    if book_data is not None:
+        for k, v in book_data[0].items():
+            data[k] = v
+
+    for key, value in i.items():
+        #print key, value
+        if key in "titulo_" + str(_id):
+            data['titulo'] = value
+        elif key in "curso_" + str(_id):
+            data['curso'] = value
+        elif key in "grupo_" + str(_id):
+            data['grupo'] = value
+        elif key in "editorial_" + str(_id):
+            data['editorial'] = value
+        elif key in "precio_" + str(_id):
+            data['precio'] = value
+        elif key in "stock_" + str(_id):
+            data['stock'] = value
+        elif key in "delete_" + str(_id):
+            delete = True
+
+    if delete:
+        config.DB.delete('books', where="id=$_id", vars=locals())
+    else:
+        config.DB.update('books', where="id=$_id", titulo=data['titulo'], curso=data['curso'], 
+            editorial=data['editorial'], precio=data['precio'], stock=int(data['stock']),
+            grupo=data['grupo'], vars=locals())
+
+    raise web.seeother('/books')
+
+
+def bookexport_get():
+    books = config.DB.select('books')
+    data = []
+    data.append('titulo,curso,grupo,editorial,precio,stock')
+    for book in books:
+        row = []
+        row.append(book['titulo'])
+        row.append(book['curso'])
+        row.append(book['grupo'])
+        row.append(book['editorial'])
+        row.append(book['precio'])
+        row.append(str(book['stock']))
+        data.append(",".join(row))
+
+    web.header('Content-Type','text/csv')
+    web.header('Content-disposition', 'attachment; filename=libros.csv')
+    return "\n".join(data)
+

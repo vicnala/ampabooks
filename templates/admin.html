@@ -1,13 +1,22 @@
 <title>Administración</title>
 
-<body>
-    <a href="/" class="def">inicio</a>
-    <a href="/grades" class="def">cursos</a>
-    <a href="/groups" class="def">grupos</a>
-    <a href="/students" class="def">alumnos</a>
-    <a href="/books" class="def">libros</a>
-    <a href="/tickets" class="def">tickets</a>
-    <a href="/users" class="def">usuarios</a>
-    <a href="/backup" class="def">backup</a>
-    <b><i>Admin!</i></b> (<a href="/logout" class="def">logout</a>)
-</body>
+
+<a href="/" class="def">inicio</a>
+<a href="/grades" class="def">cursos</a>
+<a href="/groups" class="def">grupos</a>
+<a href="/students" class="def">alumnos</a>
+<a href="/books" class="def">libros</a>
+<a href="/tickets" class="def">tickets</a>
+<a href="/users" class="def">usuarios</a>
+<a href="/backup" class="def">backup</a>
+<b><i>Admin!</i></b> (<a href="/logout" class="def">logout</a>)
+
+<h3>Notas de ayuda</h3>
+
+<p>Para importar/exportar datos debes tener en cuenta los siguientes puntos:</p>
+
+<ul>
+<li>Sólo se admiten <strong>archivos con valores separados por comas</strong> o <strong>CSV</strong>. Lo de la coma es importante.</li>
+<li>La codificación de caracteres es <strong>UTF-8</strong> y lo deberás tener en cuenta tanto al importar los datos en tu hoja de cálculo (Excel, LibreOffice, etc.) como al guardarlo como <code>.csv</code>.</li>
+</ul>
+<p>Por ejemplo, cuando LibreOffice abre el archivo <code>.csv</code>, se abre un cuadro de diálogo en el que pregunta cuál es la codificación de caracteres que se debe utilizar y cuál es el delimitador de texto. Entonces hay que seleccionar <code>Unicode (UTF-8)</code> como codificación y la <code>coma</code> como delimitador.</p>
