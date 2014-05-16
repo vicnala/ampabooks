@@ -237,7 +237,6 @@ def studexport_get():
 
 
 def studimport_get():
-    web.header("Content-Type","text/html; charset=utf-8")
     return render.studimport()
 
 
@@ -255,6 +254,7 @@ def studimport_post():
                 dr = csv.DictReader(data) # comma is default delimiter
                 to_db = [(i['nombre'], i['curso'], i['grupo'], i['tutor'], i['tel1'],
                          i['tel2'], i['mail1'], i['mail2']) for i in dr]
+                os.remove(fname)
             except Exception, e:
                 os.remove(fname)
                 return render.error('csv.DictReader', e)
@@ -374,4 +374,42 @@ def bookexport_get():
     web.header('Content-Type','text/csv')
     web.header('Content-disposition', 'attachment; filename=libros.csv')
     return "\n".join(data)
+
+
+
+def bookimport_get():
+    return render.bookimport()
+
+def bookimport_post():
+    x = web.input(myfile={})
+    if 'myfile' in x:
+        fname = 'tmp/libros.csv'
+        f = open(fname, 'w')
+        f.write(x.myfile.file.read())
+        f.close()
+
+        with open(fname, 'rb') as data:
+            try:
+                # csv.DictReader uses first line in file for column headings by default
+                dr = csv.DictReader(data) # comma is default delimiter
+                to_db = [(i['titulo'], i['curso'], i['grupo'], i['editorial'], i['precio'],
+                         i['stock']) for i in dr]
+                os.remove(fname)
+            except Exception, e:
+                os.remove(fname)
+                return render.error('csv.DictReader', e)
+            else:
+                con = sqlite3.connect('libros.sqlite')
+                con.text_factory = str
+                cur = con.cursor()
+                try:
+                    cur.executemany('''INSERT INTO books (titulo, curso, grupo, editorial, 
+                                        precio, stock)
+                                        VALUES (?, ?, ?, ?, ?, ?);''',
+                                        to_db)
+                    con.commit()
+                except Exception, e:
+                    return render.error('SQLite', e)
+
+    raise web.seeother('/books')
 
