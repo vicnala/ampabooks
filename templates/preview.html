@@ -1,0 +1,63 @@
+$def with (student, items, total, user, date)
+
+<title>4. Revisar lista</title>
+<a href="/" class = "def">inicio</a>
+<b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
+
+<h2>4. Revisar lista</h2>
+<p><i>Revisa los datos de la lista antes de <b>imprimir</b>:</i></p>
+
+<hr />
+
+<table border="0" cellpadding="2">
+<tr>
+    <td><b>Fecha</b></td>
+    <td>$date</td>
+</tr>
+<tr>
+    <td><b>Nombre</b></td>
+    <td>$student.nombre</td>
+</tr>
+
+<tr>
+    <td><b>Curso</b></td>
+    <td>$student.curso $student.grupo</td>
+</tr>
+
+</table>
+
+<hr />
+
+<table border="0" cellpadding="2">
+<tr>
+    <td><b>Item</b></td>
+    <td><b>curso</b></td>
+    <td><b>grupo</b></td>
+    <td><b>titulo</b></td>
+    <td><b>editorial</b></td>
+    <td><b>precio</b></td>
+</tr>
+
+$for item in items:
+    $for i in item:
+        <tr id="t$i.id">
+        <td>$i.id</td>
+        <td>$i.curso</td>
+        <td>$i.grupo</td>
+        <td>$i.titulo</td>
+        <td>$i.editorial</td>
+        <td>$i.precio EUR</td>
+    </tr>
+<tr>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b>Total</b></td>
+    <td><b>$total EUR</b></td>
+</tr>
+</table>
+
+<hr />
+
+<a href="/print" target="_blank" class = "def">Imprimir y archivar</a>
+

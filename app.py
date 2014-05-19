@@ -1,6 +1,8 @@
 import web
 import view, config
 from view import render, search_form
+from operator import itemgetter
+from datetime import datetime
 
 urls = (
     '/', 'index',
@@ -40,6 +42,7 @@ session = web.session.Session(app, web.session.DiskStore('sessions'), {
     'username': None,
     'term': None,
     'studid': None,
+    'items' : [],
     'logged_in': None
 })
 
@@ -121,11 +124,24 @@ class cart:
         student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())                
         return render.cart(student[0], pack, session.name)
 
-    """
     @restrict
     def POST(self):
-        pass
-    """
+        i = web.input()
+        # sort
+        isorted = sorted(i, key=itemgetter(0))
+        res = map(int, isorted)
+        # store
+        del session.items[:]
+        for prod_id in map(str, sorted(res)):
+            session.items.append(config.DB.select('books', where = "id = $prod_id limit 1", vars=locals()).list())
+        # compute total
+        total = 0
+        for item in session.items:
+            for i in item:
+                total = total + float(i['precio'])
+        # get student data
+        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())
+        return render.preview(student[0], session.items, total, session.name, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
 
 class admin:
