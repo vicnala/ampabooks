@@ -2,7 +2,7 @@ import web
 import config
 from datetime import datetime
 from forms import login_form
-from view import render
+from render import render
 
 def get():
     return render.login(login_form, datetime.now().strftime("%d-%m-%Y %H:%M:%S"), allow = True)

@@ -1,6 +1,7 @@
 import web
-import view, config, views_login
-from view import render, search_form
+import view, config, login, admin
+from render import render
+from forms import search_form
 from operator import itemgetter
 from datetime import datetime
 
@@ -10,9 +11,9 @@ urls = (
     '/results','results',
     '/cart','cart',
     '/print','printandarchive',
-    '/login','login',
+    '/login','_login',
     '/logout','logout',
-    '/admin','admin',
+    '/admin','_admin',
     '/grades', 'grades',
     '/gradeadd', 'gradeadd',
     '/groups', 'groups',
@@ -186,184 +187,184 @@ class printandarchive:
 
 
 
-class admin:
+class _admin:
     @admin_restrict
     def GET(self):
-        return view.admin_get()
+        return admin.admin_get()
 
 
 class grades:
     @admin_restrict
     def GET(self):
-        return view.grades_get()
+        return admin.grades_get()
 
     @admin_restrict
     def POST(self):
-        return view.grades_post()
+        return admin.grades_post()
 
 
 class gradeadd:
     @admin_restrict
     def GET(self):
-        return view.gradeadd_get()
+        return admin.gradeadd_get()
 
     @admin_restrict
     def POST(self):
-        return view.gradeadd_post()
+        return admin.gradeadd_post()
 
 
 
 class groups:
     @admin_restrict
     def GET(self):
-        return view.groups_get()
+        return admin.groups_get()
 
     @admin_restrict
     def POST(self):
-        return view.groups_post()
+        return admin.groups_post()
 
 
 class groupadd:
     @admin_restrict
     def GET(self):
-        return view.groupadd_get()
+        return admin.groupadd_get()
 
     @admin_restrict
     def POST(self):
-        return view.groupadd_post()
+        return admin.groupadd_post()
 
 
 
 class users:
     @admin_restrict
     def GET(self):
-        return view.users_get()
+        return admin.users_get()
 
     @admin_restrict
     def POST(self):
-        return view.users_post()
+        return admin.users_post()
 
 
 class useradd:
     @admin_restrict
     def GET(self):
-        return view.useradd_get()
+        return admin.useradd_get()
 
     @admin_restrict
     def POST(self):
-        return view.useradd_post()
+        return admin.useradd_post()
 
 
 
 class students:
     @admin_restrict
     def GET(self):
-        return view.students_get()
+        return admin.students_get()
 
     @admin_restrict
     def POST(self):
-        return view.students_post()
+        return admin.students_post()
 
 
 class studadd:
     @admin_restrict
     def GET(self):
-        return view.studadd_get()
+        return admin.studadd_get()
 
     @admin_restrict
     def POST(self):
-        return view.studadd_post()
+        return admin.studadd_post()
 
 
 class studedit:
     @admin_restrict
     def GET(self, _id):
-        return view.studedit_get(web.websafe(_id))
+        return admin.studedit_get(web.websafe(_id))
 
     @admin_restrict
     def POST(self, _id):
-        return view.studedit_post(web.websafe(_id))
+        return admin.studedit_post(web.websafe(_id))
 
 class studexport:
     @admin_restrict
     def GET(self):
-        return view.studexport_get()
+        return admin.studexport_get()
 
     @admin_restrict
     def POST(self):
-        return view.studexport_post()
+        return admin.studexport_post()
 
 
 class studimport:
     @admin_restrict
     def GET(self):
-        return view.studimport_get()
+        return admin.studimport_get()
 
     @admin_restrict
     def POST(self):
-        return view.studimport_post()
+        return admin.studimport_post()
 
 
 
 class books:
     @admin_restrict
     def GET(self):
-        return view.books_get()
+        return admin.books_get()
 
     @admin_restrict
     def POST(self):
-        return view.books_post()
+        return admin.books_post()
 
 
 class bookadd:
     @admin_restrict
     def GET(self):
-        return view.bookadd_get()
+        return admin.bookadd_get()
 
     @admin_restrict
     def POST(self):
-        return view.bookadd_post()
+        return admin.bookadd_post()
 
 
 class bookedit:
     @admin_restrict
     def GET(self, _id):
-        return view.bookedit_get(web.websafe(_id))
+        return admin.bookedit_get(web.websafe(_id))
 
     @admin_restrict
     def POST(self, _id):
-        return view.bookedit_post(web.websafe(_id))
+        return admin.bookedit_post(web.websafe(_id))
 
 
 class bookexport:
     @admin_restrict
     def GET(self):
-        return view.bookexport_get()
+        return admin.bookexport_get()
 
     @admin_restrict
     def POST(self):
-        return view.bookexport_post()
+        return admin.bookexport_post()
 
 
 class bookimport:
     @admin_restrict
     def GET(self):
-        return view.bookimport_get()
+        return admin.bookimport_get()
 
     @admin_restrict
     def POST(self):
-        return view.bookimport_post()
+        return admin.bookimport_post()
 
 
 
 class backup:
     @admin_restrict
     def GET(self):
-        return view.backup_get()
+        return admin.backup_get()
 
     @admin_restrict
     def POST(self):
-        return view.backup_post()
+        return admin.backup_post()
 
 
 class database:
@@ -374,12 +375,12 @@ class database:
 
 
 
-class login:
+class _login:
     def GET(self):
-        return views_login.get()
+        return login.get()
 
     def POST(self):
-        return views_login.post(session)
+        return login.post(session)
 
 
 class logout:
