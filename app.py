@@ -24,6 +24,8 @@ urls = (
     '/bookimport', 'bookimport',
     '/users','users',
     '/useradd', 'useradd',
+    '/backup', 'backup',
+    '/libros.sqlite', 'database',
     '/libros.css','css',
     '/favicon.ico','favicon',
 )
@@ -238,6 +240,24 @@ class bookimport:
     @admin_restrict
     def POST(self):
         return view.bookimport_post()
+
+
+
+class backup:
+    @admin_restrict
+    def GET(self):
+        return view.backup_get()
+
+    @admin_restrict
+    def POST(self):
+        return view.backup_post()
+
+
+class database:
+    @admin_restrict
+    def GET(self):
+        f = open("libros.sqlite", 'rb')
+        return f.read()
 
 
 

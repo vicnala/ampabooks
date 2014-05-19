@@ -6,6 +6,7 @@ from forms import login_form, useradd_form, gradeadd_form, groupadd_form, studad
 import csv
 import sqlite3
 import os
+import shutil
 
 t_globals = dict(
   datestr=web.datestr,
@@ -413,3 +414,25 @@ def bookimport_post():
 
     raise web.seeother('/books')
 
+
+
+def backup_get():
+    return render.backup()
+
+def backup_post():
+    x = web.input(myfile={})
+    if 'myfile' in x:
+        now = datetime.now()
+        timestamp = now.strftime('%Y%m%d%H%M%S')
+        shutil.copy2('libros.sqlite', 'libros-' + timestamp + '-' + '.sqlite')
+        # replaces the windows-style slashes with linux ones.
+        filepath = x.myfile.filename.replace('\\','/') 
+        # splits the and chooses the last part (the filename with extension)
+        filename = filepath.split('/')[-1]
+        # creates the file where the uploaded file should be stored
+        fout = open(filename,'w')
+        # writes the uploaded file to the newly created file.
+        fout.write(x.myfile.file.read())
+        # closes the file, upload complete.
+        fout.close()
+    raise web.seeother('/admin')
