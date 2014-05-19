@@ -1,9 +1,6 @@
 import web
 import view, config, login, admin
 from render import render
-from forms import search_form
-from operator import itemgetter
-from datetime import datetime
 
 urls = (
     '/', 'index',
@@ -77,114 +74,43 @@ class admin_restrict(object):
 class index:
     @restrict
     def GET(self):
-        #return view.listing()
-        if session.username != 'admin':
-            raise web.seeother('/search')
-        raise web.seeother('/admin')
+        return view.index_get(session)
 
 
 class search:
     @restrict
     def GET(self):
-        return render.search(search_form, session.name)
+        return view.search_get(session)
 
     @restrict
     def POST(self):
-        if not search_form.validates(): 
-            return render.search(search_form, session.name)
-        else:
-            session.term = dict(name = "%" + search_form.d.buscar.upper() + "%")
-            raise web.seeother('/results')     
+        return view.search_post(session)
 
 
 class results:
     @restrict
     def GET(self):
-        res = config.DB.select('students', session.term, where = "nombre LIKE $name OR curso LIKE $name")
-        return render.results(res, session.name)
+        return view.results_get(session)
     
     @restrict
     def POST(self):
-        form = web.input().group
-        if form is not None:
-            session.studid = form
-            raise web.seeother('/cart')
-        raise web.seeother('/search')
-
+        return view.results_post(session)
 
 
 class cart:
     @restrict
     def GET(self):
-        # get related pack
-        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())
-        term = dict(curso=student[0].curso)
-        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())
-        term['grupo'] = student[0].grupo
-        #print term
-        pack = config.DB.select('books', term, where="curso = $curso AND grupo = 'TODOS' OR curso = $curso AND grupo = $grupo")
-        # get student (again)
-        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())                
-        return render.cart(student[0], pack, session.name)
+        return view.cart_get(session)
 
     @restrict
     def POST(self):
-        i = web.input()
-        # sort
-        isorted = sorted(i, key=itemgetter(0))
-        res = map(int, isorted)
-        # store
-        del session.items[:]
-        for prod_id in map(str, sorted(res)):
-            session.items.append(config.DB.select('books', where = "id = $prod_id limit 1", vars=locals()).list())
-        # compute total
-        total = 0.0
-        for item in session.items:
-            for i in item:
-                total = total + float(i['precio'])
-        # get student data
-        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())
-        return render.preview(student[0], session.items, total, session.name, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+        return view.cart_post(session)
 
 
 class printandarchive:
     @restrict
     def GET(self):
-        # compute total
-        del session.dbitems[:]
-        total = 0
-        for item in session.items:
-            for i in item:
-                s = int(i['stock'])
-                iid = int(i['id'])
-                session.dbitems.append(i['id'])
-                total = total + float(i['precio'])
-                s = s - 1
-                # update stock
-                config.DB.update('books', where="id = $iid", stock=s, vars=locals())
-
-        
-        # sort invoice db items as string
-        res = str(sorted(session.dbitems)).strip('[]')
-        
-        # get student data
-        student = config.DB.select('students', where="id = $session.studid limit 1", vars=globals()).list()
-        sname = student[0]['nombre']
-        grade = student[0]['curso']
-
-        # archive
-        config.DB.insert('tickets', dependiente=session.name, alumno=sname, curso=grade, items=res, total=total, date=datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-
-        # get ORG and NIF from 'users'
-        org = 'ORG'
-        org = config.DB.select('users', where="username = $org limit 1", vars=locals()).list()
-        nif = 'NIF'
-        nif = config.DB.select('users', where="username = $nif limit 1", vars=locals()).list()
-
-        # print
-        invoice = config.DB.select('tickets', order="id desc limit 1").list()
-        return render.printandarchive(invoice[0], sorted(session.items, key=lambda k: k[0]['id']), org[0], nif[0], enabled=True)
-
+        return view.printandarchive(session)
 
 
 class _admin:
