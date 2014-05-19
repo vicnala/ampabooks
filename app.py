@@ -1,5 +1,5 @@
 import web
-import view, config
+import view, config, views_login
 from view import render, search_form
 from operator import itemgetter
 from datetime import datetime
@@ -376,10 +376,10 @@ class database:
 
 class login:
     def GET(self):
-        return view.login_get()
+        return views_login.get()
 
     def POST(self):
-        return view.login_post(session)
+        return views_login.post(session)
 
 
 class logout:
