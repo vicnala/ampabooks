@@ -6,6 +6,7 @@ urls = (
     '/', 'index',
     '/search','search',
     '/results','results',
+    '/cart','cart',
     '/login','login',
     '/logout','logout',
     '/admin','admin',
@@ -91,19 +92,40 @@ class search:
 
 
 class results:
+    @restrict
     def GET(self):
         res = config.DB.select('students', session.term, where = "nombre LIKE $name OR curso LIKE $name")
         return render.results(res, session.name)
-
-    """
+    
+    @restrict
     def POST(self):
         form = web.input().group
         if form is not None:
             session.studid = form
             raise web.seeother('/cart')
         raise web.seeother('/search')
-    """
 
+
+
+class cart:
+    @restrict
+    def GET(self):
+        # get related pack
+        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())
+        term = dict(curso=student[0].curso)
+        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())
+        term['grupo'] = student[0].grupo
+        print term
+        pack = config.DB.select('books', term, where="curso = $curso AND grupo = 'TODOS' OR curso = $curso AND grupo = $grupo")
+        # get student (again)
+        student = config.DB.select('students', where = "id = $session.studid limit 1", vars=globals())                
+        return render.cart(student[0], pack, session.name)
+
+    """
+    @restrict
+    def POST(self):
+        pass
+    """
 
 
 class admin:

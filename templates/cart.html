@@ -1,0 +1,42 @@
+$def with (student, books, user)
+<link rel="stylesheet" href="librosculla.css">
+<title>3. Carrito</title>
+<a href="/" class = "def">inicio</a>
+<b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
+<h3>Venta de libros de texto AMPA Culla</h3>
+
+<h2>3. Carrito de la compra</h2>
+
+<p><i>Selecciona <b> los libros</b>:</i></p>
+
+<h3>Libros para $student.nombre, de $student.curso $student.grupo</h3>
+
+<form name="books" method="post"> 
+
+<table border="0" cellpadding="2">
+<tr>
+    <td><b>Select</b></td>
+    <td><b>id</b></td>
+    <td><b>curso</b></td>
+    <td><b>grupo</b></td>
+    <td><b>titulo</b></td>
+    <td><b>editorial</b></td>
+    <td><b>precio</b></td>
+</tr>
+$for book in books:
+    <tr id="t$book.id">
+        <td><input type="Checkbox" name="$book.id"></input></td>
+        <td>$book.id</td>
+        <td>$book.curso</td>
+        <td>$book.grupo</td>
+        <td>$book.titulo</td>
+        <td>$book.editorial</td>
+        <td>$book.precio EUR</td>
+    </tr>
+<tr id="addmore">
+    <td><input type="Checkbox" name="addmore"></input></td>
+    <td>Mostrar todos</td>
+</tr>
+</table>
+<input type="submit" />
+</form>
