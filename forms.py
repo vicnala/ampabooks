@@ -4,6 +4,10 @@ login_form = web.form.Form(
     web.form.Textbox('usuario', web.form.notnull),
 )
 
+search_form = web.form.Form(
+    web.form.Textbox('buscar', web.form.notnull),
+)
+
 useradd_form = web.form.Form(
     web.form.Textbox('username', web.form.notnull),
     web.form.Textbox('name', web.form.notnull),

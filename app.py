@@ -1,10 +1,11 @@
 import web
 import view, config
-from view import render
+from view import render, search_form
 
 urls = (
     '/', 'index',
     '/search','search',
+    '/results','results',
     '/login','login',
     '/logout','logout',
     '/admin','admin',
@@ -36,6 +37,8 @@ app.internalerror = web.debugerror
 session = web.session.Session(app, web.session.DiskStore('sessions'), {
     'name': None,
     'username': None,
+    'term': None,
+    'studid': None,
     'logged_in': None
 })
 
@@ -71,6 +74,36 @@ class index:
         if session.username != 'admin':
             raise web.seeother('/search')
         raise web.seeother('/admin')
+
+
+class search:
+    @restrict
+    def GET(self):
+        return render.search(search_form, session.name)
+
+    @restrict
+    def POST(self):
+        if not search_form.validates(): 
+            return render.search(search_form, session.name)
+        else:
+            session.term = dict(name = "%" + search_form.d.buscar.upper() + "%")
+            raise web.seeother('/results')     
+
+
+class results:
+    def GET(self):
+        res = config.DB.select('students', session.term, where = "nombre LIKE $name OR curso LIKE $name")
+        return render.results(res, session.name)
+
+    """
+    def POST(self):
+        form = web.input().group
+        if form is not None:
+            session.studid = form
+            raise web.seeother('/cart')
+        raise web.seeother('/search')
+    """
+
 
 
 class admin:
@@ -258,13 +291,6 @@ class database:
     def GET(self):
         f = open("libros.sqlite", 'rb')
         return f.read()
-
-
-
-class search:
-    @restrict
-    def GET(self):
-        return render.search()
 
 
 

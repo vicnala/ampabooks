@@ -1,1 +1,18 @@
-Search (<a href="/logout" class="def">logout</a>)
+$def with (form, user)
+
+<title>1. Buscar alumno</title>
+<body onload="javascript:document.main.buscar.focus()">
+
+<a href="/" class="def">inicio</a>
+<b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
+
+<h2>1. Buscar alumno</h2>
+
+<p><i>Introduce todo o <b>una parte</b> del nombre o del apellido del alumno:</i></p>
+
+<form name="main" method="post"> 
+$if not form.valid: <p class="error">* Revisa los campos obligatorios!</p>
+$:form.render()
+<input type="submit" />    </form>
+
+</body>
