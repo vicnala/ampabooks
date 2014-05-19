@@ -142,10 +142,12 @@ def students_post():
 
 
 def studadd_get():
+    del grades[:]
     db_grades = config.DB.select('grades')
     for grade in db_grades:
         grades.append((grade.grade, grade.grade))
 
+    del groups[:]
     db_groups = config.DB.select('groups')
     for group in db_groups:
         groups.append((group.groupe, group.groupe))
@@ -288,10 +290,12 @@ def books_post():
 
 
 def bookadd_get():
+    grades = []
     db_grades = config.DB.select('grades')
     for grade in db_grades:
         grades.append((grade.grade, grade.grade))
 
+    groups = []
     db_groups = config.DB.select('groups')
     for group in db_groups:
         groups.append((group.groupe, group.groupe))

@@ -18,11 +18,13 @@ def _init ():
     import sqlite3
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    from tables import items, item1, users, admin, grades, groups, tickets, students, books, default_grade, default_group
+    from tables import items, item1, users, admin, org, nif, grades, groups, tickets, students, books, default_grade, default_group
     c.execute(items)
     c.execute(item1)
     c.execute(users)
     c.execute(admin)
+    c.execute(org)
+    c.execute(nif)
     c.execute(grades)
     c.execute(default_grade)
     c.execute(groups)

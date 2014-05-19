@@ -1,0 +1,67 @@
+$def with (invoice, items, org, nif, enabled)
+
+<title>Nota de entrega</title>
+
+$if enabled is True:
+    <body onload="javascript:window.print()">
+$else:
+    <body>
+<p>Te ha atendido <b><i>$invoice.dependiente</i></b> el $invoice.date</p>
+<hr />
+
+<h2>Nota de entrega</h2>
+
+<p>
+<b>Número de nota:</b> $invoice.id<br>
+$if org.name != 'None':
+    <b>Organización:</b> $org.name<br>
+
+$if nif.name != '0':
+    <b>NIF:</b> $nif.name<br>
+</p>
+
+<hr />
+
+<h3>Alumno</h3>
+
+<table border="0" cellpadding="2">
+    <tr>
+        <td><b>Nombre</b></td>
+        <td>$invoice.alumno</td>
+    </tr>
+        <td><b>Curso</b></td>        
+        <td>$invoice.curso</td>
+    </tr>
+</table>
+
+<hr />
+
+<table border="0" cellpadding="2">
+<tr>
+    <td><b>Item</b></td>
+    <td><b>Curso</b></td>
+    <td><b>Grupo</b></td>
+    <td><b>Título</b></td>
+    <td><b>Editorial</b></td>
+    <td><b>Precio</b></td>
+</tr>
+
+$for item in items:
+    $for i in item:
+        <tr id="t$i.id">
+        <td>$i.id</td>
+        <td>$i.curso</td>
+        <td>$i.grupo</td>
+        <td>$i.titulo</td>
+        <td>$i.editorial</td>
+        <td>$i.precio EUR</td>
+    </tr>
+<tr>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b>Total</b></td>
+    <td><b>$invoice.total EUR</b></td>
+</tr>
+</table>
+</body>

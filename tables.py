@@ -14,5 +14,7 @@ students = 'CREATE TABLE students ("id" INTEGER PRIMARY KEY NOT NULL, "curso" TE
 books = 'CREATE TABLE books ("id" INTEGER PRIMARY KEY NOT NULL, "curso" TEXT, "isbn" TEXT, "titulo" TEXT, "editorial" TEXT, "precio" TEXT, "stock" INTEGER, "grupo" TEXT)'
 
 admin = 'INSERT INTO users VALUES (1, "admin", "Administrador")'
+org = 'INSERT INTO users VALUES (2, "ORG", "None")'
+nif = 'INSERT INTO users VALUES (3, "NIF", "0")'
 default_grade = 'INSERT INTO grades VALUES (1, "todos")'
 default_group = 'INSERT INTO groups VALUES (1, "todos")'
