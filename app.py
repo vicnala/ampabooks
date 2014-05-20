@@ -35,6 +35,7 @@ urls = (
     '/libros.sqlite', 'database',
     '/libros.css','css',
     '/favicon.ico','favicon',
+    '/LICENSE', 'license'
 )
 
 web.config.debug = False
@@ -366,6 +367,13 @@ class favicon:
         f = open("images/favicon.ico", 'rb')
         web.header("Content-Type","image/x-icon") 
         return f.read()
+
+
+class license:
+    def GET(self):
+        f = open("LICENSE", 'rb')
+        return f.read() 
+
 
 
 if __name__ == "__main__":
