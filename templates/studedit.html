@@ -6,8 +6,8 @@ $def with (stud, grades, groups)
 
 <h2>Editar alumno:</h2>
 
-$for s in stud
-    <form name="studedit" method="post" id="1">
+<form name="studedit" method="post" id="1">
+$for s in stud:
     <table border="0" cellpadding="2">
     <tr>
         <td><b>id</b></td>
@@ -71,5 +71,5 @@ $for s in stud
     <input type="checkbox" name="delete_$s['id']"></input> <b style="color:#ff0000">Eliminar alumno</b></td> 
     <hr />
     <input type="submit" />
-    </form>
+</form>
 </body>

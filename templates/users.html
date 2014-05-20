@@ -12,14 +12,14 @@ El usuario <b>ORG</b> se usa para definir el emisor del ticket.
 
 <table border="0" cellpadding="2">
 <tr>
-	<td style="color:#ff0000"><b>delete</b></td>
+	<td style="color:#0000ff"><b>edit</b></td>
 	<td><b>username</b></td>
 	<td><b>name</b></td>
 </tr>
 $for user in users:
 	<tr id="t$user.id">
         <td>
-        	$if user.id > 3 :
+        	$if user.id > 1 :
         		<input type="Checkbox" name="$user.id"></input>
         </td>
 		<td>$user.username</td>

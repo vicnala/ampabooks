@@ -74,9 +74,11 @@ def users_get():
 
 def users_post():
     i = web.input()
-    for user_id in i:
-        config.DB.delete('users', where="id=$user_id", vars=locals())
-    raise web.seeother('/users')
+    for key, value in i.items():
+        if value in 'on':
+            raise web.seeother('/useredit/' + key)
+
+
 
 def useradd_get():
     return render.useradd(useradd_form)
@@ -90,6 +92,46 @@ def useradd_post():
         except:
             return "El usuario ya existe, elige otro."
         raise web.seeother('/users')
+
+
+def useredit_get(_id):
+    user = config.DB.select('users', where="id=$_id limit 1", vars=locals())
+    if user is not None:
+        return render.useredit(user)
+    else:
+        raise web.seeother('/users')
+
+
+def useredit_post(_id):
+    i = web.input()
+    user_data = config.DB.select('users', where="id=$_id limit 1", vars=locals())
+    data = {}
+    if user_data is not None:
+        for k, v in user_data[0].items():
+            data[k] = v
+
+    delete = False
+    print data
+
+    for key, value in i.items():
+        if key in "nick_" + str(_id):
+            data['username'] = value
+        elif key in "name_" + str(_id):
+            data['name'] = value
+        elif key in "delete_" + str(_id):
+            delete = True
+
+    print data
+
+    if delete:
+        config.DB.delete('users', where="id=$_id", vars=locals())
+    else:
+        config.DB.update('users', where="id=$_id", username=data['username'], name=data['name'], vars=locals())
+
+    raise web.seeother('/users')
+
+
+
 
 
 

@@ -30,6 +30,7 @@ urls = (
     '/ticket/(.*)','ticket',
     '/users','users',
     '/useradd', 'useradd',
+    '/useredit/(.*)', 'useredit',
     '/backup', 'backup',
     '/libros.sqlite', 'database',
     '/libros.css','css',
@@ -192,6 +193,15 @@ class useradd:
     def POST(self):
         return admin.useradd_post()
 
+
+class useredit:
+    @admin_restrict
+    def GET(self, _id):
+        return admin.useredit_get(web.websafe(_id))
+
+    @admin_restrict
+    def POST(self, _id):
+        return admin.useredit_post(web.websafe(_id))
 
 
 class students:

@@ -6,8 +6,8 @@ $def with (book, grades, groups)
 
 <h2>Editar libro:</h2>
 
-$for s in book
-    <form name="bookedit" method="post" id="1">
+<form name="bookedit" method="post" id="1">
+$for s in book:
     <table border="0" cellpadding="2">
     <tr>
         <td><b>id</b></td>
@@ -60,5 +60,5 @@ $for s in book
     <input type="checkbox" name="delete_$s['id']"></input> <b style="color:#ff0000">Eliminar libro</b></td> 
     <hr />
     <input type="submit" />
-    </form>
+</form>
 </body>

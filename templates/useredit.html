@@ -1,0 +1,36 @@
+$def with (user)
+<title>Editar usuario</title>
+<body>
+<a href="/" class = "def">inicio</a> <a href="/users" class = "def">usuarios</a>
+<b><i>Admin!</i></b> (<a href="/logout" class = "def">logout</a>)
+
+<h2>Editar usuario:</h2>
+
+<form name="useredit" method="post" id="1">
+$for s in user:
+    <table border="0" cellpadding="2">
+    <tr>
+        <td><b>id</b></td>
+        <td>$s['id']</input></td>
+    </tr>
+    <tr>
+        <td><b>username</b></td>
+        <td>
+        $if s['id'] > 3:
+            <input type="text" name="nick_$s['id']" value="$s['username']" size="32"></input>
+        $else:
+            $s['username']
+        </td>
+    </tr>
+    <tr>
+        <td><b>name</b></td>
+        <td><input type="text" name="name_$s['id']" value="$s['name']" size="32"></input></td>
+    </tr>
+    </table>
+    <hr />
+    <input type="checkbox" name="delete_$s['id']"></input> <b style="color:#ff0000">Eliminar usuario</b>
+    <hr />
+    <input type="submit" />
+</form>
+</body>
+
