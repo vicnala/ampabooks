@@ -33,6 +33,7 @@ urls = (
     '/useredit/(.*)', 'useredit',
     '/backup', 'backup',
     '/libros.sqlite', 'database',
+    '/libros-vacia.sqlite', 'blank_database',
     '/libros.css','css',
     '/favicon.ico','favicon',
     '/LICENSE', 'license'
@@ -340,6 +341,12 @@ class database:
         f = open("libros.sqlite", 'rb')
         return f.read()
 
+
+class blank_database:
+    @admin_restrict
+    def GET(self):
+        f = open("libros-vacia.sqlite", 'rb')
+        return f.read()
 
 
 class _login:

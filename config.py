@@ -1,6 +1,7 @@
 import web
 import os.path
 import sys
+import shutil
 
 DATABASE = 'libros.sqlite'
 
@@ -14,7 +15,7 @@ def _touch(fname, times=None):
 
     return False
 
-def _init ():
+def _init():
     import sqlite3
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
@@ -35,6 +36,9 @@ def _init ():
     conn.commit()
     conn.close()
 
+def _copy_blank():
+    shutil.copy2('libros.sqlite', 'libros-vacia.sqlite')
+
 if os.path.isfile(DATABASE):
     DB = web.database(dbn='sqlite', db=DATABASE)
 else:
@@ -42,6 +46,7 @@ else:
     if _touch(DATABASE):
         print 'initializing database', DATABASE, '...'
         _init()
+        _copy_blank()
         DB = web.database(dbn='sqlite', db=DATABASE)
     else:
         print 'Error crerating', DATABASE, 'file.'
