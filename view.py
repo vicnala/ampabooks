@@ -82,7 +82,7 @@ def printandarchive(session):
             config.DB.update('books', where="id = $iid", stock=s, vars=locals())
 
     
-    # sort invoice db items as string
+    # sort ticket db items as string
     res = str(sorted(session.dbitems)).strip('[]')
     
     # get student data
@@ -91,7 +91,7 @@ def printandarchive(session):
     grade = student[0]['curso']
 
     # archive
-    config.DB.insert('tickets', dependiente=session.name, alumno=sname, curso=grade, items=res, total=total, date=datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    config.DB.insert('tickets', dependiente=session.name, alumno=sname, curso=grade, libros=res, total=total, date=datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
     # get ORG and NIF from 'users'
     org = 'ORG'
@@ -100,5 +100,5 @@ def printandarchive(session):
     nif = config.DB.select('users', where="username = $nif limit 1", vars=locals()).list()
 
     # print
-    invoice = config.DB.select('tickets', order="id desc limit 1").list()
-    return render.printandarchive(invoice[0], sorted(session.items, key=lambda k: k[0]['id']), org[0], nif[0], enabled=True)
+    ticket = config.DB.select('tickets', order="id desc limit 1").list()
+    return render.printandarchive(ticket[0], sorted(session.items, key=lambda k: k[0]['id']), org[0], nif[0], enabled=True)

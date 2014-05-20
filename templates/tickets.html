@@ -1,0 +1,43 @@
+$def with (tickets, total)
+<title>Tickets</title>
+<body>
+<a href="/" class = "def">inicio</a>
+<b><i>Admin!</i></b> (<a href="/logout" class = "def">logout</a>)
+<h2>Tickets registrados</h2>
+
+<form name="tickets" method="post">
+<table border="0" cellpadding="2">
+<tr>
+    <td style="color:#ff0000"><b>delete</b></td>
+    <td><b>id</b></td>
+    <td><b>alumno</b></td>
+    <td><b>curso</b></td>
+    <td><b>ID libros</b></td>
+    <td><b>fecha</b></td>
+    <td><b>dependiente</b></td>
+    <td><b>importe</b></td>
+</tr>
+$for inv in tickets:
+    <tr id="t$inv.id">
+        <td><input type="Checkbox" name="$inv.id"></input></td>
+        <td><a href="/ticket/$inv.id" target="_blank" class = "def">$inv.id</a></td>
+        <td>$inv.alumno</td>
+        <td>$inv.curso</td>
+        <td>$inv.libros</td>
+        <td>$inv.date</td>
+        <td>$inv.dependiente</td>
+        <td>$inv.total EUR</td>     
+    </tr>
+<tr>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b></b></td>
+    <td><b>Total</b></td>
+    <td><b>$total</b></td>  
+</tr>
+</table>
+<input type="submit" />
+</form>
+</body>

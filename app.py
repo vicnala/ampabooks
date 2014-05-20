@@ -25,6 +25,8 @@ urls = (
     '/bookedit/(.*)', 'bookedit',
     '/bookexport', 'bookexport',
     '/bookimport', 'bookimport',
+    '/tickets','tickets',
+    '/ticket/(.*)','ticket',
     '/users','users',
     '/useradd', 'useradd',
     '/backup', 'backup',
@@ -280,6 +282,24 @@ class bookimport:
     @admin_restrict
     def POST(self):
         return admin.bookimport_post()
+
+
+
+class tickets:
+    @admin_restrict
+    def GET(self):
+        return admin.tickets_get()
+
+    @admin_restrict
+    def POST(self):
+        return admin.tickets_post()
+
+
+class ticket:
+    @admin_restrict
+    def GET(self, id):
+        return admin.ticket_get(id)
+
 
 
 

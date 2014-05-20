@@ -382,6 +382,46 @@ def bookimport_post():
 
 
 
+
+def tickets_get():
+    tickets = config.DB.select('tickets')
+    # compute total
+    total = 0.0
+    for item in tickets:
+        total = total + float(item['total'])
+    tickets = config.DB.select('tickets')
+    return render.tickets(tickets, total)
+
+def tickets_post():
+    i = web.input()
+    for inv_id in i:
+        # TODO add items to the stock
+        config.DB.delete('tickets', where="id=$inv_id", vars=locals())
+    raise web.seeother('/tickets')
+
+
+
+def ticket_get(id):
+    itemlist = list()
+    # get ORG and NIF from 'users'
+    org = 'ORG'
+    org = config.DB.select('users', where="username = $org limit 1", vars=locals()).list();
+    nif = 'NIF'
+    nif = config.DB.select('users', where="username = $nif limit 1", vars=locals()).list();
+    # get books IDs
+    ticket = config.DB.select('tickets', where="id=$id limit 1", vars=locals())
+    stritems = ticket[0]['libros']
+    splited = stritems.split(', ')
+    # sort books IDs
+    res = map(int, splited)
+    for i in map(str, sorted(res)):
+        itemlist.append(config.DB.select('books', where="id = $i limit 1", vars=locals()).list())
+    # get ticket
+    ticket = config.DB.select('tickets', where="id=$id limit 1", vars=locals())
+    return render.printandarchive(ticket[0], itemlist, org[0], nif[0], enabled=False)
+
+
+
 def backup_get():
     return render.backup()
 
