@@ -13,7 +13,7 @@ def index_get(session):
 
 
 def search_get(session):
-	return render.search(search_form, session.name)
+	return render.search(search_form, session.name, session.mode)
 
 def search_post(session):
     if not search_form.validates(): 
@@ -25,7 +25,7 @@ def search_post(session):
 
 def results_get(session):
     res = config.DB.select('students', session.term, where = "nombre LIKE $name OR curso LIKE $name")
-    return render.results(res, session.name)
+    return render.results(res, session.name, session.mode)
 
 def results_post(session):
     form = web.input().group
@@ -45,7 +45,7 @@ def cart_get(session):
     pack = config.DB.select('books', term, where="curso = $curso AND grupo = 'TODOS' OR curso = $curso AND grupo = $grupo")
     # get student (again)
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())                
-    return render.cart(student[0], pack, session.name)
+    return render.cart(student[0], pack, session.name, session.mode)
 
 
 def cart_post(session):
@@ -61,10 +61,14 @@ def cart_post(session):
     total = 0.0
     for item in session.items:
         for i in item:
-            total = total + float(i['precio'])
+            if session.mode:
+                total = total - float(i['precio'])
+            else:
+                total = total + float(i['precio'])
+
     # get student data
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())
-    return render.preview(student[0], session.items, total, session.name, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    return render.preview(student[0], session.items, total, session.name, session.mode, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
 
 def printandarchive(session):
@@ -76,8 +80,15 @@ def printandarchive(session):
             s = int(i['stock'])
             iid = int(i['id'])
             session.dbitems.append(i['id'])
-            total = total + float(i['precio'])
-            s = s - 1
+
+            if session.mode:
+                total = total - float(i['precio'])
+                s = s + 1
+            else:
+                total = total + float(i['precio'])
+                s = s - 1
+                # update socio
+
             # update stock
             config.DB.update('books', where="id = $iid", stock=s, vars=locals())
 
@@ -101,4 +112,4 @@ def printandarchive(session):
 
     # print
     ticket = config.DB.select('tickets', order="id desc limit 1").list()
-    return render.printandarchive(ticket[0], sorted(session.items, key=lambda k: k[0]['id']), org[0], nif[0], enabled=True)
+    return render.printandarchive(ticket[0], sorted(session.items, key=lambda k: k[0]['id']), session.mode, org[0], nif[0], enabled=True)

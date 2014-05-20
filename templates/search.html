@@ -1,12 +1,21 @@
-$def with (form, user)
+$def with (form, user, mode)
 
 <title>1. Buscar alumno</title>
 <body onload="javascript:document.main.buscar.focus()">
 
 <a href="/" class="def">inicio</a>
+$if mode:
+    <a href="/mode" class = "dev">devolución</a>
+$else:
+    <a href="/mode" class = "def">devolución</a>
+
 <b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
 
-<h2>1. Buscar alumno</h2>
+$if mode:
+    <h2>1. Buscar alumno <em>(devolución)</em></h2>
+$else:
+    <h2>1. Buscar alumno <em>(compra)</em></h2>
+
 
 <p><i>Introduce todo o <b>una parte</b> del nombre o del apellido del alumno:</i></p>
 

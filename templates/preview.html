@@ -1,10 +1,14 @@
-$def with (student, items, total, user, date)
+$def with (student, items, total, user, mode, date)
 <title>4. Revisar lista</title>
 <body>
 <a href="/" class = "def">inicio</a>
 <b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
 
-<h2>4. Revisar lista</h2>
+$if mode:
+    <h2>4. Revisar lista <em>(devolución)</em></h2>
+$else:
+    <h2>4. Revisar lista <em>(compra)</em></h2>
+
 <p><i>Revisa los datos de la lista antes de <b>imprimir</b>:</i></p>
 
 <hr />
@@ -46,7 +50,10 @@ $for item in items:
         <td>$i.grupo</td>
         <td>$i.titulo</td>
         <td>$i.editorial</td>
-        <td>$i.precio EUR</td>
+        $if mode:
+            <td>-$i.precio EUR</td>
+        $else:
+            <td>$i.precio EUR</td>
     </tr>
 <tr>
     <td><b></b></td>

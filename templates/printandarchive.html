@@ -1,4 +1,4 @@
-$def with (invoice, items, org, nif, enabled)
+$def with (invoice, items, mode, org, nif, enabled)
 
 <title>Nota de entrega</title>
 
@@ -9,7 +9,10 @@ $else:
 <p>Te ha atendido <b><i>$invoice.dependiente</i></b> el $invoice.date</p>
 <hr />
 
-<h2>Nota de entrega</h2>
+$if mode:
+    <h2>Nota de entrega <em>(devolución)</em></h2>
+$else:
+    <h2>Nota de entrega <em>(compra)</em></h2>
 
 <p>
 <b>Número de nota:</b> $invoice.id<br>
@@ -54,7 +57,10 @@ $for item in items:
         <td>$i.grupo</td>
         <td>$i.titulo</td>
         <td>$i.editorial</td>
-        <td>$i.precio EUR</td>
+        $if mode:
+            <td>-$i.precio EUR</td>
+        $else:
+            <td>$i.precio EUR</td>
     </tr>
 <tr>
     <td><b></b></td>

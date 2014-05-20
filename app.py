@@ -5,6 +5,7 @@ from render import render
 urls = (
     '/', 'index',
     '/search','search',
+    '/mode','mode',
     '/results','results',
     '/cart','cart',
     '/print','printandarchive',
@@ -41,6 +42,7 @@ app.internalerror = web.debugerror
 session = web.session.Session(app, web.session.DiskStore('sessions'), {
     'name': None,
     'username': None,
+    'mode': 0,
     'term': None,
     'studid': None,
     'items' : [],
@@ -76,6 +78,7 @@ class admin_restrict(object):
 class index:
     @restrict
     def GET(self):
+        session.mode = 0
         return view.index_get(session)
 
 
@@ -87,6 +90,13 @@ class search:
     @restrict
     def POST(self):
         return view.search_post(session)
+
+
+class mode:
+    def GET(self):
+        session.mode = not session.mode
+        raise web.seeother('/search')
+
 
 
 class results:

@@ -1,11 +1,15 @@
-$def with (students, user)
+$def with (students, user, mode)
 
 <title>2. Alumnos encontrados</title>
 <body>
 <a href="/" class = "def">inicio</a>
 <b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
 
-<h2>2. Alumnos encontrados (compra)</h2>
+$if mode:
+    <h2>2. Alumnos encontrados <em>(devolución)</em></h2>
+$else:
+    <h2>2. Alumnos encontrados <em>(compra)</em></h2>
+
 <p><i>Selecciona el alumno o vuelve a <a href="/search" class = "def">buscar</a>.
 
 <form name="results" method="post"> 

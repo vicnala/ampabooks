@@ -1,10 +1,13 @@
-$def with (student, books, user)
+$def with (student, books, user, mode)
 <title>3. Carrito</title>
 <body>
 <a href="/" class = "def">inicio</a>
 <b><i>$user</i></b> (<a href="/logout" class = "def">logout</a>)
 
-<h2>3. Carrito de la compra</h2>
+$if mode:
+    <h2>3. Carrito de la compra <em>(devolución)</em></h2>
+$else:
+    <h2>3. Carrito de la compra <em>(compra)</em></h2>
 
 <p><i>Selecciona <b> los libros</b>:</i></p>
 
@@ -30,7 +33,10 @@ $for book in books:
         <td>$book.grupo</td>
         <td>$book.titulo</td>
         <td>$book.editorial</td>
-        <td>$book.precio EUR</td>
+        $if mode:
+            <td>-$book.precio EUR</td>
+        $else:
+            <td>$book.precio EUR</td>
     </tr>
 <tr id="addmore">
     <td><input type="Checkbox" name="addmore"></input></td>
