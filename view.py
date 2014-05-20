@@ -112,4 +112,4 @@ def printandarchive(session):
 
     # print
     ticket = config.DB.select('tickets', order="id desc limit 1").list()
-    return render.printandarchive(ticket[0], sorted(session.items, key=lambda k: k[0]['id']), session.mode, org[0], nif[0], enabled=True)
+    return render.printandarchive(ticket[0], sorted(session.items, key=lambda k: k[0]['id']), org[0], nif[0], enabled=True)
