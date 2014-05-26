@@ -12,28 +12,15 @@ urls = (
     '/login','_login',
     '/logout','logout',
     '/admin','_admin',
-    '/grades', 'grades',
-    '/gradeadd', 'gradeadd',
-    '/groups', 'groups',
-    '/groupadd', 'groupadd',
-    '/students', 'students',
-    '/studadd', 'studadd',
+    '/admin/(grades|gradeadd|groups|groupadd|students|studadd|studexport|' +
+        'studimport|books|bookadd|bookexport|bookimport|tickets|users|useradd|' +
+        'backup)', '_admins',
     '/studedit/(.*)', 'studedit',
-    '/studexport', 'studexport',
-    '/studimport', 'studimport',
-    '/books', 'books',
-    '/bookadd', 'bookadd',
     '/bookedit/(.*)', 'bookedit',
-    '/bookexport', 'bookexport',
-    '/bookimport', 'bookimport',
-    '/tickets','tickets',
     '/ticket/(.*)','ticket',
-    '/users','users',
-    '/useradd', 'useradd',
     '/useredit/(.*)', 'useredit',
-    '/backup', 'backup',
     '/libros.sqlite', 'database',
-    '/libros-vacia.sqlite', 'blank_database',
+    '/libros-vacia.sqlite', 'blank_database',    
     '/libros.css','css',
     '/favicon.ico','favicon',
     '/LICENSE', 'license'
@@ -134,66 +121,76 @@ class _admin:
         return admin.admin_get()
 
 
-class grades:
+
+class _admins:
     @admin_restrict
-    def GET(self):
-        return admin.grades_get()
+    def GET(self, param):
+        if param == 'grades':
+            return admin.grades_get()
+        elif param == 'gradeadd':
+            return admin.gradeadd_get()
+        elif param == 'groups':
+            return admin.groups_get()
+        elif param == 'groupadd':
+            return admin.groupadd_get()
+        elif param == 'users':
+            return admin.users_get()
+        elif param == 'useradd':
+            return admin.useradd_get()
+        elif param == 'students':
+            return admin.students_get()
+        elif param == 'studadd':
+            return admin.studadd_get()
+        elif param == 'studexport':
+            return admin.studexport_get()
+        elif param == 'studimport':
+            return admin.studimport_get()
+        elif param == 'books':
+            return admin.books_get()
+        elif param == 'bookadd':
+            return admin.bookadd_get()
+        elif param == 'bookexport':
+            return admin.bookexport_get()
+        elif param == 'bookimport':
+            return admin.bookimport_get()
+        elif param == 'tickets':
+            return admin.tickets_get()
+        elif param == 'backup':
+            return admin.backup_get()  
 
-    @admin_restrict
-    def POST(self):
-        return admin.grades_post()
-
-
-class gradeadd:
-    @admin_restrict
-    def GET(self):
-        return admin.gradeadd_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.gradeadd_post()
-
-
-
-class groups:
-    @admin_restrict
-    def GET(self):
-        return admin.groups_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.groups_post()
-
-
-class groupadd:
-    @admin_restrict
-    def GET(self):
-        return admin.groupadd_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.groupadd_post()
-
-
-
-class users:
-    @admin_restrict
-    def GET(self):
-        return admin.users_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.users_post()
-
-
-class useradd:
-    @admin_restrict
-    def GET(self):
-        return admin.useradd_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.useradd_post()
+    def POST(self, param):
+        if param == 'grades':
+            return admin.grades_post()
+        elif param == 'gradeadd':
+            return admin.gradeadd_post()
+        elif param == 'groups':
+            return admin.groups_post()
+        elif param == 'groupadd':
+            return admin.groupadd_post()
+        elif param == 'users':
+            return admin.users_post()
+        elif param == 'useradd':
+            return admin.useradd_post()
+        elif param == 'students':
+            return admin.students_post()
+        elif param == 'studadd':
+            return admin.studadd_post()
+        elif param == 'studexport':
+            return admin.studexport_post()
+        elif param == 'studimport':
+            return admin.studimport_post()
+        elif param == 'books':
+            return admin.books_post()
+        elif param == 'bookadd':
+            return admin.bookadd_post()
+        elif param == 'bookexport':
+            return admin.bookexport_post()
+        elif param == 'bookimport':
+            return admin.bookimport_post()
+        elif param == 'tickets':
+            return admin.tickets_post()
+        elif param == 'backup':
+            return admin.backup_post()
 
 
 class useredit:
@@ -206,26 +203,6 @@ class useredit:
         return admin.useredit_post(web.websafe(_id))
 
 
-class students:
-    @admin_restrict
-    def GET(self):
-        return admin.students_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.students_post()
-
-
-class studadd:
-    @admin_restrict
-    def GET(self):
-        return admin.studadd_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.studadd_post()
-
-
 class studedit:
     @admin_restrict
     def GET(self, _id):
@@ -234,46 +211,6 @@ class studedit:
     @admin_restrict
     def POST(self, _id):
         return admin.studedit_post(web.websafe(_id))
-
-class studexport:
-    @admin_restrict
-    def GET(self):
-        return admin.studexport_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.studexport_post()
-
-
-class studimport:
-    @admin_restrict
-    def GET(self):
-        return admin.studimport_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.studimport_post()
-
-
-
-class books:
-    @admin_restrict
-    def GET(self):
-        return admin.books_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.books_post()
-
-
-class bookadd:
-    @admin_restrict
-    def GET(self):
-        return admin.bookadd_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.bookadd_post()
 
 
 class bookedit:
@@ -284,55 +221,6 @@ class bookedit:
     @admin_restrict
     def POST(self, _id):
         return admin.bookedit_post(web.websafe(_id))
-
-
-class bookexport:
-    @admin_restrict
-    def GET(self):
-        return admin.bookexport_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.bookexport_post()
-
-
-class bookimport:
-    @admin_restrict
-    def GET(self):
-        return admin.bookimport_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.bookimport_post()
-
-
-
-class tickets:
-    @admin_restrict
-    def GET(self):
-        return admin.tickets_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.tickets_post()
-
-
-class ticket:
-    @admin_restrict
-    def GET(self, id):
-        return admin.ticket_get(id)
-
-
-
-
-class backup:
-    @admin_restrict
-    def GET(self):
-        return admin.backup_get()
-
-    @admin_restrict
-    def POST(self):
-        return admin.backup_post()
 
 
 class database:
@@ -347,6 +235,7 @@ class blank_database:
     def GET(self):
         f = open("libros-vacia.sqlite", 'rb')
         return f.read()
+
 
 
 class _login:

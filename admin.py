@@ -24,7 +24,7 @@ def grades_post():
     i = web.input()
     for grades_id in i:
         config.DB.delete('grades', where="id=$grades_id", vars=locals())
-    raise web.seeother('/grades')
+    raise web.seeother('/admin/grades')
 
 def gradeadd_get():
     return render.gradeadd(gradeadd_form)
@@ -37,7 +37,7 @@ def gradeadd_post():
             config.DB.insert('grades', grade=gradeadd_form.d.curso)
         except:
             return "El curso ya existe!"
-        raise web.seeother('/grades')
+        raise web.seeother('/admin/grades')
 
 
 
@@ -49,7 +49,7 @@ def groups_post():
     i = web.input()
     for groups_id in i:
         config.DB.delete('groups', where="id=$groups_id", vars=locals())
-    raise web.seeother('/groups')
+    raise web.seeother('/admin/groups')
 
 def groupadd_get():
     return render.groupadd(groupadd_form)
@@ -63,7 +63,7 @@ def groupadd_post():
             config.DB.insert('groups', groupe=groupadd_form.d.grupo)
         except:
             return "El grupo ya existe!"
-        raise web.seeother('/groups')
+        raise web.seeother('/admin/groups')
 
 
 
@@ -91,7 +91,7 @@ def useradd_post():
             config.DB.insert('users', username=useradd_form.d.username, name=useradd_form.d.name)
         except:
             return "El usuario ya existe, elige otro."
-        raise web.seeother('/users')
+        raise web.seeother('/admin/users')
 
 
 def useredit_get(_id):
@@ -99,7 +99,7 @@ def useredit_get(_id):
     if user is not None:
         return render.useredit(user)
     else:
-        raise web.seeother('/users')
+        raise web.seeother('/admin/users')
 
 
 def useredit_post(_id):
@@ -128,7 +128,7 @@ def useredit_post(_id):
     else:
         config.DB.update('users', where="id=$_id", username=data['username'], name=data['name'], vars=locals())
 
-    raise web.seeother('/users')
+    raise web.seeother('/admin/users')
 
 
 
@@ -165,7 +165,7 @@ def studadd_post():
         return render.studadd(f)
     else:
         config.DB.insert('students', nombre=f.d.nombre, curso=f.d.curso, grupo=f.d.grupo, tutor=f.d.tutor, tel1=f.d.tel1, tel2=f.d.tel2, mail1=f.d.mail1, mail2=f.d.mail2)
-        raise web.seeother('/students')
+        raise web.seeother('/admin/students')
 
 
 
@@ -177,7 +177,7 @@ def studedit_get(_id):
 
         return render.studedit(stud, db_grades, db_groups)
     else:
-        raise web.seeother('/students')
+        raise web.seeother('/admin/students')
 
 
 def studedit_post(_id):
@@ -219,7 +219,7 @@ def studedit_post(_id):
             tutor=data['tutor'], tel1=data['tel1'], tel2=data['tel2'], mail1=data['mail1'],
             mail2=data['mail2'], grupo=data['grupo'], vars=locals())
 
-    raise web.seeother('/students')
+    raise web.seeother('/admin/students')
 
 
 def studexport_get():
@@ -278,7 +278,7 @@ def studimport_post():
                 except Exception, e:
                     return render.error('SQLite', e)
 
-    raise web.seeother('/students')
+    raise web.seeother('/admin/students')
 
 
 
@@ -313,7 +313,7 @@ def bookadd_post():
         return render.bookadd(f)
     else:
         config.DB.insert('books', titulo=f.d.titulo, curso=f.d.curso, grupo=f.d.grupo, editorial=f.d.editorial, precio=f.d.precio, stock=f.d.stock)
-        raise web.seeother('/books')
+        raise web.seeother('/admin/books')
 
 
 
@@ -325,7 +325,7 @@ def bookedit_get(_id):
 
         return render.bookedit(book, db_grades, db_groups)
     else:
-        raise web.seeother('/books')
+        raise web.seeother('/admin/books')
 
 
 def bookedit_post(_id):
@@ -363,7 +363,7 @@ def bookedit_post(_id):
             editorial=data['editorial'], precio=data['precio'], stock=int(data['stock']),
             grupo=data['grupo'], vars=locals())
 
-    raise web.seeother('/books')
+    raise web.seeother('/admin/books')
 
 
 def bookexport_get():
@@ -420,7 +420,7 @@ def bookimport_post():
                 except Exception, e:
                     return render.error('SQLite', e)
 
-    raise web.seeother('/books')
+    raise web.seeother('/admin/books')
 
 
 
@@ -439,7 +439,7 @@ def tickets_post():
     for inv_id in i:
         # TODO add items to the stock
         config.DB.delete('tickets', where="id=$inv_id", vars=locals())
-    raise web.seeother('/tickets')
+    raise web.seeother('/admin/tickets')
 
 
 
@@ -472,11 +472,8 @@ def backup_post():
     if 'myfile' in x:
         now = datetime.now()
         timestamp = now.strftime('%Y%m%d%H%M%S')
-        shutil.copy2('libros.sqlite', 'libros-' + timestamp + '-' + '.sqlite')
-        # replaces the windows-style slashes with linux ones.
-        filepath = x.myfile.filename.replace('\\','/') 
-        # splits the and chooses the last part (the filename with extension)
-        filename = filepath.split('/')[-1]
+        shutil.copy2('libros.sqlite', 'libros-' + timestamp + '.sqlite')
+        filename = 'libros.sqlite'
         # creates the file where the uploaded file should be stored
         fout = open(filename,'w')
         # writes the uploaded file to the newly created file.
