@@ -223,6 +223,12 @@ class bookedit:
         return admin.bookedit_post(web.websafe(_id))
 
 
+class ticket:
+    @admin_restrict
+    def GET(self, id):
+        return admin.ticket_get(id)
+
+
 class database:
     @admin_restrict
     def GET(self):
@@ -235,7 +241,6 @@ class blank_database:
     def GET(self):
         f = open("db/libros-vacia.sqlite", 'rb')
         return f.read()
-
 
 
 class _login:
