@@ -3,7 +3,7 @@ import os.path
 import sys
 import shutil
 
-DATABASE = 'libros.sqlite'
+DATABASE = 'db/libros.sqlite'
 
 def _touch(fname, times=None):
     fhandle = open(fname, 'a')
@@ -37,7 +37,7 @@ def _init():
     conn.close()
 
 def _copy_blank():
-    shutil.copy2('libros.sqlite', 'libros-vacia.sqlite')
+    shutil.copy2(DATABASE, 'db/libros-vacia.sqlite')
 
 if os.path.isfile(DATABASE):
     DB = web.database(dbn='sqlite', db=DATABASE)

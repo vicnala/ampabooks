@@ -266,7 +266,7 @@ def studimport_post():
                 os.remove(fname)
                 return render.error('csv.DictReader', e)
             else:
-                con = sqlite3.connect('libros.sqlite')
+                con = sqlite3.connect('db/libros.sqlite')
                 con.text_factory = str
                 cur = con.cursor()
                 try:
@@ -408,7 +408,7 @@ def bookimport_post():
                 os.remove(fname)
                 return render.error('csv.DictReader', e)
             else:
-                con = sqlite3.connect('libros.sqlite')
+                con = sqlite3.connect('db/libros.sqlite')
                 con.text_factory = str
                 cur = con.cursor()
                 try:
@@ -472,8 +472,8 @@ def backup_post():
     if 'myfile' in x:
         now = datetime.now()
         timestamp = now.strftime('%Y%m%d%H%M%S')
-        shutil.copy2('libros.sqlite', 'libros-' + timestamp + '.sqlite')
-        filename = 'libros.sqlite'
+        shutil.copy2('db/libros.sqlite', 'db/libros-' + timestamp + '.sqlite')
+        filename = 'db/libros.sqlite'
         # creates the file where the uploaded file should be stored
         fout = open(filename,'w')
         # writes the uploaded file to the newly created file.

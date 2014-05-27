@@ -226,14 +226,14 @@ class bookedit:
 class database:
     @admin_restrict
     def GET(self):
-        f = open("libros.sqlite", 'rb')
+        f = open("db/libros.sqlite", 'rb')
         return f.read()
 
 
 class blank_database:
     @admin_restrict
     def GET(self):
-        f = open("libros-vacia.sqlite", 'rb')
+        f = open("db/libros-vacia.sqlite", 'rb')
         return f.read()
 
 
