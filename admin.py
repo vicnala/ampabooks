@@ -255,12 +255,40 @@ def studimport_post():
         f.write(x.myfile.file.read())
         f.close()
 
+        grades_db = config.DB.select('grades')
+        groups_db = config.DB.select('groups')
+
+        grades_db_list = []
+        groups_db_list = []
+
+        new_grades = []
+        new_groups = []
+
         with open(fname, 'rb') as data:
             try:
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
                 to_db = [(i['nombre'], i['curso'], i['grupo'], i['tutor'], i['tel1'],
                          i['tel2'], i['mail1'], i['mail2']) for i in dr]
+                for gdb in grades_db:
+                    grades_db_list.append(gdb['grade'])
+
+                for gdb in groups_db:
+                    groups_db_list.append(gdb['groupe'])
+
+                for item in to_db:
+                    if item[1] in grades_db_list:
+                        pass
+                    else:
+                        new_grades.append(item[1])
+                        grades_db_list.append(item[1])
+                    if item[2] in groups_db_list:
+                        pass
+                    else:
+                        new_groups.append(item[2])
+                        groups_db_list.append(item[2])
+                        
+                print new_grades, new_groups
                 os.remove(fname)
             except Exception, e:
                 os.remove(fname)
@@ -277,6 +305,12 @@ def studimport_post():
                     con.commit()
                 except Exception, e:
                     return render.error('SQLite', e)
+
+                for grade in new_grades:
+                    config.DB.insert('grades', grade=grade)
+
+                for group in new_groups:
+                    config.DB.insert('groups', groupe=group)
 
     raise web.seeother('/admin/students')
 
@@ -397,12 +431,42 @@ def bookimport_post():
         f.write(x.myfile.file.read())
         f.close()
 
+        grades_db = config.DB.select('grades')
+        groups_db = config.DB.select('groups')
+
+        grades_db_list = []
+        groups_db_list = []
+
+        new_grades = []
+        new_groups = []
+
         with open(fname, 'rb') as data:
             try:
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
                 to_db = [(i['titulo'], i['curso'], i['grupo'], i['editorial'], i['precio'],
                          i['stock']) for i in dr]
+
+                for gdb in grades_db:
+                    grades_db_list.append(gdb['grade'])
+
+                for gdb in groups_db:
+                    groups_db_list.append(gdb['groupe'])
+
+                for item in to_db:
+                    if item[1] in grades_db_list:
+                        pass
+                    else:
+                        new_grades.append(item[1])
+                        grades_db_list.append(item[1])
+                    if item[2] in groups_db_list:
+                        pass
+                    else:
+                        new_groups.append(item[2])
+                        groups_db_list.append(item[2])
+                        
+                print new_grades, new_groups
+
                 os.remove(fname)
             except Exception, e:
                 os.remove(fname)
@@ -412,13 +476,22 @@ def bookimport_post():
                 con.text_factory = str
                 cur = con.cursor()
                 try:
+                    print to_db
                     cur.executemany('''INSERT INTO books (titulo, curso, grupo, editorial, 
                                         precio, stock)
                                         VALUES (?, ?, ?, ?, ?, ?);''',
                                         to_db)
+
                     con.commit()
+
                 except Exception, e:
                     return render.error('SQLite', e)
+
+                for grade in new_grades:
+                    config.DB.insert('grades', grade=grade)
+
+                for group in new_groups:
+                    config.DB.insert('groups', groupe=group)
 
     raise web.seeother('/admin/books')
 
