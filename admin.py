@@ -346,7 +346,7 @@ def bookadd_post():
     if not f.validates(): 
         return render.bookadd(f)
     else:
-        config.DB.insert('books', titulo=f.d.titulo, curso=f.d.curso, grupo=f.d.grupo, editorial=f.d.editorial, precio=f.d.precio, stock=f.d.stock)
+        config.DB.insert('books', titulo=f.d.titulo, curso=f.d.curso, grupo=f.d.grupo, editorial=f.d.editorial, isbn=f.d.isbn, precio=f.d.precio, stock=f.d.stock)
         raise web.seeother('/admin/books')
 
 
@@ -383,6 +383,8 @@ def bookedit_post(_id):
             data['grupo'] = value
         elif key in "editorial_" + str(_id):
             data['editorial'] = value
+        elif key in "isbn_" + str(_id):
+            data['isbn'] = value
         elif key in "precio_" + str(_id):
             data['precio'] = value
         elif key in "stock_" + str(_id):
@@ -394,8 +396,8 @@ def bookedit_post(_id):
         config.DB.delete('books', where="id=$_id", vars=locals())
     else:
         config.DB.update('books', where="id=$_id", titulo=data['titulo'], curso=data['curso'], 
-            editorial=data['editorial'], precio=data['precio'], stock=int(data['stock']),
-            grupo=data['grupo'], vars=locals())
+            editorial=data['editorial'], isbn=data['isbn'], precio=data['precio'], 
+            stock=int(data['stock']), grupo=data['grupo'], vars=locals())
 
     raise web.seeother('/admin/books')
 
@@ -403,13 +405,14 @@ def bookedit_post(_id):
 def bookexport_get():
     books = config.DB.select('books')
     data = []
-    data.append('titulo,curso,grupo,editorial,precio,stock')
+    data.append('titulo,curso,grupo,editorial,isbn,precio,stock')
     for book in books:
         row = []
         row.append(book['titulo'])
         row.append(book['curso'])
         row.append(book['grupo'])
         row.append(book['editorial'])
+        row.append(book['isbn'])
         row.append(book['precio'])
         row.append(str(book['stock']))
         data.append(",".join(row))
@@ -444,8 +447,8 @@ def bookimport_post():
             try:
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
-                to_db = [(i['titulo'], i['curso'], i['grupo'], i['editorial'], i['precio'],
-                         i['stock']) for i in dr]
+                to_db = [(i['titulo'], i['curso'], i['grupo'], i['editorial'], i['isbn'],
+                         i['precio'], i['stock']) for i in dr]
 
                 for gdb in grades_db:
                     grades_db_list.append(gdb['grade'])
@@ -478,8 +481,8 @@ def bookimport_post():
                 try:
                     print to_db
                     cur.executemany('''INSERT INTO books (titulo, curso, grupo, editorial, 
-                                        precio, stock)
-                                        VALUES (?, ?, ?, ?, ?, ?);''',
+                                        isbn, precio, stock)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?);''',
                                         to_db)
 
                     con.commit()

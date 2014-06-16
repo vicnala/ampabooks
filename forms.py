@@ -42,6 +42,7 @@ def bookadd_form (grades, groups):
         web.form.Dropdown('curso', grades),
         web.form.Dropdown('grupo', groups),
         web.form.Textbox('editorial', size=32),
+        web.form.Textbox('isbn', size=32),
         web.form.Textbox('precio', size=12),
         web.form.Textbox('stock', size=12),
     )
