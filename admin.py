@@ -268,7 +268,7 @@ def studimport_post():
             try:
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
-                to_db = [(i['nombre'], i['curso'], i['grupo'], i['tutor'], i['tel1'],
+                to_db = [(i['nombre'], i['curso'], i['grupo'].upper(), i['tutor'], i['tel1'],
                          i['tel2'], i['mail1'], i['mail2']) for i in dr]
                 for gdb in grades_db:
                     grades_db_list.append(gdb['grade'])
@@ -447,7 +447,7 @@ def bookimport_post():
             try:
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
-                to_db = [(i['titulo'], i['curso'], i['grupo'], i['editorial'], i['isbn'],
+                to_db = [(i['titulo'], i['curso'], i['grupo'].upper(), i['editorial'], i['isbn'],
                          i['precio'], i['stock']) for i in dr]
 
                 for gdb in grades_db:
