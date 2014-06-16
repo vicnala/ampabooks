@@ -46,6 +46,7 @@ $if nif.name != '0':
     <td><b>Grupo</b></td>
     <td><b>Título</b></td>
     <td><b>Editorial</b></td>
+    <td><b>ISBN</b></td>
     <td><b>Precio</b></td>
 </tr>
 
@@ -57,6 +58,7 @@ $for item in items:
         <td>$i.grupo</td>
         <td>$i.titulo</td>
         <td>$i.editorial</td>
+        <td>$i.isbn</td>
         $if ticket.total < 0:
             <td>-$i.precio EUR</td>
         $else:
