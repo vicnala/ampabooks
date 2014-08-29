@@ -448,7 +448,7 @@ def bookimport_post():
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
                 to_db = [(i['titulo'], i['curso'], i['grupo'].upper(), i['editorial'], i['isbn'],
-                         i['precio'], i['stock']) for i in dr]
+                         i['precio'].replace(',', '.'), i['stock']) for i in dr]
 
                 for gdb in grades_db:
                     grades_db_list.append(gdb['grade'])
@@ -513,7 +513,17 @@ def tickets_get():
 def tickets_post():
     i = web.input()
     for inv_id in i:
-        # TODO add items to the stock
+        # add items to the stock
+        tickets = config.DB.select('tickets', where="id=$inv_id", vars=locals())
+        for ticket in tickets:
+            book_ids = [ int(x) for x in ticket['libros'].split(',') ]
+            for id in book_ids:
+                # update stock
+                books = config.DB.select('books', where="id=$id", vars=locals())
+                for book in books:
+                    stock = book['stock'] + 1
+                config.DB.update('books', where="id=$id", stock=stock, vars=locals())
+
         config.DB.delete('tickets', where="id=$inv_id", vars=locals())
     raise web.seeother('/admin/tickets')
 
