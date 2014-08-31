@@ -10,7 +10,7 @@ grades = 'CREATE TABLE grades ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL U
 groups = 'CREATE TABLE groups ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "groupe" TEXT NOT NULL UNIQUE)'
 
 tickets = 'CREATE TABLE tickets ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "date" DATETIME NOT NULL DEFAULT CURRENT_DATE, "dependiente" TEXT NOT NULL, "alumno" TEXT NOT NULL, "curso" TEXT NOT NULL, "libros" TEXT NOT NULL, "total" NUMERIC NOT NULL )'
-students = 'CREATE TABLE students ("id" INTEGER PRIMARY KEY NOT NULL, "curso" TEXT, "nombre" TEXT, "tutor" TEXT DEFAULT (null), "hermano" TEXT, "tel1" TEXT, "tel2" TEXT, "mail1" TEXT, "mail2" TEXT, "socio" BOOL, "grupo" TEXT)'
+students = 'CREATE TABLE students ("id" INTEGER PRIMARY KEY NOT NULL, "curso" TEXT, "nombre" TEXT, "tutor" TEXT DEFAULT (null), "hermano" TEXT, "tel1" TEXT, "tel2" TEXT, "mail1" TEXT, "mail2" TEXT, "socio" BOOL, "grupo" TEXT, "profesiones" TEXT)'
 books = 'CREATE TABLE books ("id" INTEGER PRIMARY KEY NOT NULL, "curso" TEXT, "isbn" TEXT, "titulo" TEXT, "editorial" TEXT, "precio" TEXT, "stock" INTEGER, "grupo" TEXT)'
 
 admin = 'INSERT INTO users VALUES (1, "admin", "Administrador")'

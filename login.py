@@ -15,6 +15,7 @@ def post(session):
         if login_form.d.usuario == 'admin':
             session.logged_in = True
             session.username = "admin"
+            session.name = "Administrador"
             raise web.seeother('/admin')
         else:
             allowed = config.DB.select('users').list()

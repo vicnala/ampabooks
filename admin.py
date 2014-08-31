@@ -164,23 +164,23 @@ def studadd_post():
     if not f.validates(): 
         return render.studadd(f)
     else:
-        config.DB.insert('students', nombre=f.d.nombre, curso=f.d.curso, grupo=f.d.grupo, tutor=f.d.tutor, tel1=f.d.tel1, tel2=f.d.tel2, mail1=f.d.mail1, mail2=f.d.mail2)
+        config.DB.insert('students', nombre=f.d.nombre, curso=f.d.curso, grupo=f.d.grupo, tutor=f.d.tutor, profesiones=f.d.profesiones, tel1=f.d.tel1, tel2=f.d.tel2, mail1=f.d.mail1, mail2=f.d.mail2)
         raise web.seeother('/admin/students')
 
 
 
-def studedit_get(_id):
+def studedit_get(_id, session):
     stud = config.DB.select('students', where="id=$_id", vars=locals())
     if stud is not None:
         db_grades = config.DB.select('grades')
         db_groups = config.DB.select('groups')
 
-        return render.studedit(stud, db_grades, db_groups)
+        return render.studedit(stud, db_grades, db_groups, session.name)
     else:
         raise web.seeother('/admin/students')
 
 
-def studedit_post(_id):
+def studedit_post(_id, session):
     i = web.input()
     delete = False
 
@@ -201,6 +201,8 @@ def studedit_post(_id):
             data['grupo'] = value
         elif key in "tutor_" + str(_id):
             data['tutor'] = value
+        elif key in "profesiones_" + str(_id):
+            data['profesiones'] = value
         elif key in "tel1_" + str(_id):
             data['tel1'] = value
         elif key in "tel2_" + str(_id):
@@ -216,8 +218,11 @@ def studedit_post(_id):
         config.DB.delete('students', where="id=$_id", vars=locals())
     else:
         config.DB.update('students', where="id=$_id", nombre=data['nombre'], curso=data['curso'], 
-            tutor=data['tutor'], tel1=data['tel1'], tel2=data['tel2'], mail1=data['mail1'],
+            tutor=data['tutor'], profesiones=data['profesiones'], tel1=data['tel1'], tel2=data['tel2'], mail1=data['mail1'],
             mail2=data['mail2'], grupo=data['grupo'], vars=locals())
+
+    if session.username != 'admin':
+        raise web.seeother('/cart')
 
     raise web.seeother('/admin/students')
 
@@ -225,13 +230,14 @@ def studedit_post(_id):
 def studexport_get():
     students = config.DB.select('students')
     data = []
-    data.append('nombre,curso,grupo,tutor,tel1,tel2,mail1,mail2')
+    data.append('nombre,curso,grupo,tutor,profesiones,tel1,tel2,mail1,mail2')
     for stud in students:
         row = []
         row.append(stud['nombre'])
         row.append(stud['curso'])
         row.append(stud['grupo'])
         row.append(stud['tutor'])
+        row.append(stud['profesiones'])
         row.append(stud['tel1'])
         row.append(stud['tel2'])
         row.append(stud['mail1'])
@@ -268,7 +274,7 @@ def studimport_post():
             try:
                 # csv.DictReader uses first line in file for column headings by default
                 dr = csv.DictReader(data) # comma is default delimiter
-                to_db = [(i['nombre'], i['curso'], i['grupo'].upper(), i['tutor'], i['tel1'],
+                to_db = [(i['nombre'], i['curso'], i['grupo'].upper(), i['tutor'], i['profesiones'], i['tel1'],
                          i['tel2'], i['mail1'], i['mail2']) for i in dr]
                 for gdb in grades_db:
                     grades_db_list.append(gdb['grade'])
@@ -299,7 +305,7 @@ def studimport_post():
                 cur = con.cursor()
                 try:
                     cur.executemany('''INSERT INTO students (nombre, curso, grupo, tutor, 
-                                        tel1, tel2, mail1, mail2)
+                                        profesiones, tel1, tel2, mail1, mail2)
                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?);''',
                                         to_db)
                     con.commit()

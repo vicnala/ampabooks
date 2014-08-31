@@ -27,6 +27,7 @@ def studadd_form (grades, groups):
         web.form.Dropdown('curso', grades),
         web.form.Dropdown('grupo', groups),
         web.form.Textbox('tutor', size=64),
+        web.form.Textbox('profesiones', size=64),
         #web.form.Textbox('hermano', size=12),
         web.form.Textbox('tel1', size=12),
         web.form.Textbox('tel2', size=12),

@@ -204,13 +204,13 @@ class useredit:
 
 
 class studedit:
-    @admin_restrict
+    @restrict
     def GET(self, _id):
-        return admin.studedit_get(web.websafe(_id))
+        return admin.studedit_get(web.websafe(_id), session)
 
-    @admin_restrict
+    @restrict
     def POST(self, _id):
-        return admin.studedit_post(web.websafe(_id))
+        return admin.studedit_post(web.websafe(_id), session)
 
 
 class bookedit:

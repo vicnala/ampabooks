@@ -31,7 +31,8 @@ def results_post(session):
     form = web.input().group
     if form is not None:
         session.studid = form
-        raise web.seeother('/cart')
+        raise web.seeother('/studedit/' + session.studid)
+        #raise web.seeother('/cart')
     raise web.seeother('/search')
 
 
