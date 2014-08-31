@@ -306,7 +306,7 @@ def studimport_post():
                 try:
                     cur.executemany('''INSERT INTO students (nombre, curso, grupo, tutor, 
                                         profesiones, tel1, tel2, mail1, mail2)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?);''',
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);''',
                                         to_db)
                     con.commit()
                 except Exception, e:
@@ -514,7 +514,7 @@ def tickets_get():
     for item in tickets:
         total = total + float(item['total'])
     tickets = config.DB.select('tickets')
-    return render.tickets(tickets, total)
+    return render.tickets(tickets, "{0:.2f}".format(total))
 
 def tickets_post():
     i = web.input()
