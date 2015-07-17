@@ -13,7 +13,7 @@ $else:
 
 <h3>Libros para $student.nombre, de $student.curso $student.grupo</h3>
 
-<form name="books" method="post"> 
+<form name="books" method="post">
 
 <table border="0" cellpadding="2">
 <tr>
@@ -38,10 +38,9 @@ $for book in books:
         $else:
             <td>$book.precio EUR</td>
     </tr>
-<!-- tr id="addmore">
+    <!-- tr id="addmore">
     <td><input type="Checkbox" name="addmore"></input></td>
     <td>Mostrar todos</td -->
-</tr>
 </table>
 <input type="submit" />
 </form>

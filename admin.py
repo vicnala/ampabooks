@@ -30,7 +30,7 @@ def gradeadd_get():
     return render.gradeadd(gradeadd_form)
 
 def gradeadd_post():
-    if not gradeadd_form.validates(): 
+    if not gradeadd_form.validates():
         return render.gradeadd(gradeadd_form)
     else:
         try:
@@ -55,7 +55,7 @@ def groupadd_get():
     return render.groupadd(groupadd_form)
 
 def groupadd_post():
-    if not groupadd_form.validates(): 
+    if not groupadd_form.validates():
         return render.groupadd(groupadd_form)
     else:
         try:
@@ -84,7 +84,7 @@ def useradd_get():
     return render.useradd(useradd_form)
 
 def useradd_post():
-    if not useradd_form.validates(): 
+    if not useradd_form.validates():
         return render.login(useradd_form)
     else:
         try:
@@ -161,7 +161,7 @@ def studadd_get():
 
 def studadd_post():
     f = studadd_form(grades, groups)
-    if not f.validates(): 
+    if not f.validates():
         return render.studadd(f)
     else:
         config.DB.insert('students', nombre=f.d.nombre, curso=f.d.curso, grupo=f.d.grupo, tutor=f.d.tutor, profesiones=f.d.profesiones, tel1=f.d.tel1, tel2=f.d.tel2, mail1=f.d.mail1, mail2=f.d.mail2)
@@ -217,7 +217,7 @@ def studedit_post(_id, session):
     if delete:
         config.DB.delete('students', where="id=$_id", vars=locals())
     else:
-        config.DB.update('students', where="id=$_id", nombre=data['nombre'], curso=data['curso'], 
+        config.DB.update('students', where="id=$_id", nombre=data['nombre'], curso=data['curso'],
             tutor=data['tutor'], profesiones=data['profesiones'], tel1=data['tel1'], tel2=data['tel2'], mail1=data['mail1'],
             mail2=data['mail2'], grupo=data['grupo'], vars=locals())
 
@@ -293,7 +293,7 @@ def studimport_post():
                     else:
                         new_groups.append(item[2])
                         groups_db_list.append(item[2])
-                        
+
                 print new_grades, new_groups
                 os.remove(fname)
             except Exception, e:
@@ -304,7 +304,7 @@ def studimport_post():
                 con.text_factory = str
                 cur = con.cursor()
                 try:
-                    cur.executemany('''INSERT INTO students (nombre, curso, grupo, tutor, 
+                    cur.executemany('''INSERT INTO students (nombre, curso, grupo, tutor,
                                         profesiones, tel1, tel2, mail1, mail2)
                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);''',
                                         to_db)
@@ -349,7 +349,7 @@ def bookadd_get():
 
 def bookadd_post():
     f = bookadd_form(grades, groups)
-    if not f.validates(): 
+    if not f.validates():
         return render.bookadd(f)
     else:
         config.DB.insert('books', titulo=f.d.titulo, curso=f.d.curso, grupo=f.d.grupo, editorial=f.d.editorial, isbn=f.d.isbn, precio=f.d.precio, stock=f.d.stock)
@@ -401,8 +401,8 @@ def bookedit_post(_id):
     if delete:
         config.DB.delete('books', where="id=$_id", vars=locals())
     else:
-        config.DB.update('books', where="id=$_id", titulo=data['titulo'], curso=data['curso'], 
-            editorial=data['editorial'], isbn=data['isbn'], precio=data['precio'], 
+        config.DB.update('books', where="id=$_id", titulo=data['titulo'], curso=data['curso'],
+            editorial=data['editorial'], isbn=data['isbn'], precio=data['precio'],
             stock=int(data['stock']), grupo=data['grupo'], vars=locals())
 
     raise web.seeother('/admin/books')
@@ -473,7 +473,7 @@ def bookimport_post():
                     else:
                         new_groups.append(item[2])
                         groups_db_list.append(item[2])
-                        
+
                 print new_grades, new_groups
 
                 os.remove(fname)
@@ -486,7 +486,7 @@ def bookimport_post():
                 cur = con.cursor()
                 try:
                     print to_db
-                    cur.executemany('''INSERT INTO books (titulo, curso, grupo, editorial, 
+                    cur.executemany('''INSERT INTO books (titulo, curso, grupo, editorial,
                                         isbn, precio, stock)
                                         VALUES (?, ?, ?, ?, ?, ?, ?);''',
                                         to_db)
