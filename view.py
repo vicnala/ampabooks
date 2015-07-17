@@ -43,7 +43,7 @@ def cart_get(session):
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())
     term['grupo'] = student[0].grupo
     #print term
-    pack = config.DB.select('books', term, where="curso = $curso AND grupo = 'TODOS' OR curso = $curso AND grupo = $grupo")
+    pack = config.DB.select('books', term, where="curso = $curso AND grupo = 'TODOS' OR curso = $curso AND grupo = $grupo OR curso = 'TODOS' AND grupo = 'TODOS'")
     # get student (again)
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())                
     return render.cart(student[0], pack, session.name, session.mode)
@@ -69,7 +69,7 @@ def cart_post(session):
 
     # get student data
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())
-    return render.preview(student[0], session.items, total, session.name, session.mode, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    return render.preview(student[0], session.items, '{0:.2f}'.format(total), session.name, session.mode, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
 
 def printandarchive(session):
