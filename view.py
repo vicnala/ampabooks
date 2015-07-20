@@ -70,7 +70,6 @@ def cart_post(session):
     # get student data
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())
     return render.preview(student[0], session.items, '{0:.2f}'.format(total), session.name, session.mode, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-<<<<<<< HEAD
 
 
 def printandarchive(session):
