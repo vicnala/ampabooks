@@ -306,7 +306,7 @@ def studimport_post():
                 try:
                     cur.executemany('''INSERT INTO students (nombre, curso, grupo, tutor, 
                                         profesiones, tel1, tel2, mail1, mail2)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?);''',
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);''',
                                         to_db)
                     con.commit()
                 except Exception, e:
@@ -411,7 +411,7 @@ def bookedit_post(_id):
 def bookexport_get():
     books = config.DB.select('books')
     data = []
-    data.append('titulo,curso,grupo,editorial,isbn,precio,stock')
+    data.append('titulo;curso;grupo;editorial;isbn;precio;stock')
     for book in books:
         row = []
         row.append(book['titulo'])
@@ -421,7 +421,7 @@ def bookexport_get():
         row.append(book['isbn'])
         row.append(book['precio'])
         row.append(str(book['stock']))
-        data.append(",".join(row))
+        data.append(";".join(row))
 
     web.header('Content-Type','text/csv')
     web.header('Content-disposition', 'attachment; filename=libros.csv')
@@ -514,7 +514,7 @@ def tickets_get():
     for item in tickets:
         total = total + float(item['total'])
     tickets = config.DB.select('tickets')
-    return render.tickets(tickets, total)
+    return render.tickets(tickets, '{0:.2f}'.format(total))
 
 def tickets_post():
     i = web.input()
