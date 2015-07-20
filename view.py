@@ -16,7 +16,7 @@ def search_get(session):
 	return render.search(search_form, session.name, session.mode)
 
 def search_post(session):
-    if not search_form.validates(): 
+    if not search_form.validates():
         return render.search(search_form, session.name)
     else:
         session.term = dict(name = "%" + search_form.d.buscar.upper() + "%")
@@ -45,7 +45,7 @@ def cart_get(session):
     #print term
     pack = config.DB.select('books', term, where="curso = $curso AND grupo = 'TODOS' OR curso = $curso AND grupo = $grupo OR curso = 'TODOS' AND grupo = 'TODOS'")
     # get student (again)
-    student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())                
+    student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())
     return render.cart(student[0], pack, session.name, session.mode)
 
 
@@ -70,6 +70,7 @@ def cart_post(session):
     # get student data
     student = config.DB.select('students', where = "id = $session.studid limit 1", vars=locals())
     return render.preview(student[0], session.items, '{0:.2f}'.format(total), session.name, session.mode, datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+<<<<<<< HEAD
 
 
 def printandarchive(session):
@@ -93,10 +94,10 @@ def printandarchive(session):
             # update stock
             config.DB.update('books', where="id = $iid", stock=s, vars=locals())
 
-    
+
     # sort ticket db items as string
     res = str(sorted(session.dbitems)).strip('[]')
-    
+
     # get student data
     student = config.DB.select('students', where="id = $session.studid limit 1", vars=locals()).list()
     sname = student[0]['nombre']
